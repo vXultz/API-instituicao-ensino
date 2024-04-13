@@ -23,13 +23,7 @@ public class UsuarioEntity {
     private PapelEntity papel;
 
 
-    public boolean senhaValida(
-            LoginRequest loginRequest,
-            BCryptPasswordEncoder bCryptEncoder
-    ) {
-        return bCryptEncoder.matches(
-                loginRequest.senha(),
-                this.senha
-        );
+    public boolean senhaValida(LoginRequest loginRequest, BCryptPasswordEncoder bCryptEncoder) {
+        return bCryptEncoder.matches(loginRequest.senha(), this.senha);
     }
 }
