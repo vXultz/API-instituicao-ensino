@@ -45,7 +45,7 @@ public class TokenService {
 
         Instant now = Instant.now();
 
-        String scope = usuarioEntity.getPapel().getNome();
+        String scope = String.valueOf(usuarioEntity.getPapel().getNome());
 
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer("sistema-escolar")
