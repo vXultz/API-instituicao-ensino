@@ -12,6 +12,8 @@ public class PapelEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     @Column(unique = true)
-    private String nome;
+    private PapelEnum nome;
+
 }
