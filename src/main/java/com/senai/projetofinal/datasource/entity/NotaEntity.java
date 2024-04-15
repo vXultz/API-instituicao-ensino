@@ -3,7 +3,7 @@ package com.senai.projetofinal.datasource.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -25,5 +25,5 @@ public class NotaEntity {
 
     private String valor;
 
-    private LocalDateTime data;
+    private LocalDate data;
 }
