@@ -33,9 +33,16 @@ public class DocenteService {
         String role = tokenService.buscaCampo(token, "scope");
 
         if (!"admin".equals(role) && !"pedagogico".equals(role) && !"recruiter".equals(role)) {
-            throw new SecurityException("Tentativa de atualizar não autorizada");
+            throw new SecurityException("Usuário não autorizado");
         }
-        log.info("todos os docentees listados");
+
+        List<DocenteEntity> docentes = repository.findAll();
+
+        if(docentes.isEmpty()) {
+            throw new NotFoundException("Não há docentes cadastrados");
+        }
+
+        log.info("Todos os docentes listados");
         return repository.findAll();
     }
 
@@ -43,13 +50,18 @@ public class DocenteService {
         String role = tokenService.buscaCampo(token, "scope");
 
         if (!"admin".equals(role) && !"pedagogico".equals(role) && !"recruiter".equals(role)) {
-            throw new SecurityException("Tentativa de atualizar não autorizada");
+            throw new SecurityException("Usuário não autorizado");
         }
-        log.info("docente com id {} buscado", id);
+        log.info("Docente com id {} encontrado", id);
         return repository.findById(id).orElseThrow(() -> new NotFoundException("Docente não encontrado"));
     }
 
     public DocenteResponse salvar(InserirDocenteRequest inserirDocenteRequest, String token) {
+        String role = tokenService.buscaCampo(token, "scope");
+
+        if (!"admin".equals(role)) {
+            throw new SecurityException("Usuário não autorizado");
+        }
 
         if (inserirDocenteRequest.nome() == null || inserirDocenteRequest.nome().isBlank()) {
             throw new IllegalArgumentException("Nome não pode ser nulo ou vazio");
@@ -72,7 +84,7 @@ public class DocenteService {
 
         DocenteEntity docenteSalvo = repository.save(docente);
 
-        log.info("salvando docente com o nome {}", inserirDocenteRequest.nome());
+        log.info("Salvando docente com o nome {}", inserirDocenteRequest.nome());
         return new DocenteResponse(
                 docenteSalvo.getId(),
                 docenteSalvo.getNome(),
@@ -90,7 +102,7 @@ public class DocenteService {
             throw new NotFoundException("Nenhum docente encontrado com o id passado");
         }
 
-        log.info("removendo docente com o id {}", id);
+        log.info("Removendo docente com o id {}", id);
         repository.deleteById(id);
     }
 
@@ -107,7 +119,7 @@ public class DocenteService {
 
         DocenteEntity entity = buscarPorId(id, token);
 
-        log.info("atualizando docente com o id {}", entity.getId());
+        log.info("Atualizando docente com o id {}", entity.getId());
         entity.setNome(atualizarDocenteRequest.nome());
         return repository.save(entity);
     }
