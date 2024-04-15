@@ -18,9 +18,9 @@ public class CursoEntity {
     @Column(unique = true)
     private String nome;
 
-    @OneToMany(mappedBy = "curso")
+    @OneToMany(mappedBy = "curso", fetch = FetchType.EAGER)
     private List<TurmaEntity> turmas;
 
-    @OneToMany(mappedBy = "curso")
+    @OneToMany(mappedBy = "curso", fetch = FetchType.EAGER)
     private List<MateriaEntity> materias;
 }
