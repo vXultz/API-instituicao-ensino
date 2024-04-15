@@ -1,5 +1,8 @@
 package com.senai.projetofinal.datasource.entity;
 
+import lombok.Getter;
+
+@Getter
 public enum PapelEnum {
     ADMIN("admin"),
     PEDAGOGICO("pedagogico"),

@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import java.time.Instant;
 public class TokenService {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final JwtDecoder jwtDecoder;
     private final JwtEncoder jwtEncoder;
     private final UsuarioRepository usuarioRepository;
 
@@ -61,5 +63,13 @@ public class TokenService {
                 .getTokenValue();
 
         return new LoginResponse(valorJWT, TEMPO_EXPIRACAO);
+    }
+
+    public String buscaCampo(String token, String claim) {
+        return jwtDecoder
+                .decode(token)
+                .getClaims()
+                .get(claim)
+                .toString();
     }
 }
