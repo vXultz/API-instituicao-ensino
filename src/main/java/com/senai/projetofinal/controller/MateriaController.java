@@ -1,5 +1,6 @@
 package com.senai.projetofinal.controller;
 
+import com.senai.projetofinal.controller.dto.request.materia.AtualizarMateriaRequest;
 import com.senai.projetofinal.controller.dto.request.materia.InserirMateriaRequest;
 import com.senai.projetofinal.controller.dto.response.materia.MateriaResponse;
 import com.senai.projetofinal.datasource.entity.MateriaEntity;
@@ -36,6 +37,14 @@ public class MateriaController {
         return ResponseEntity.ok(materia);
     }
 
+    @GetMapping("/cursos/{curso_id}")
+    public ResponseEntity<List<MateriaEntity>> getMateriasByCurso(
+            @PathVariable Long curso_id,
+            @RequestHeader("Authorization") String token) {
+        List<MateriaEntity> materias = service.buscarMateriasPorCursoId(curso_id, token.substring(7));
+        return ResponseEntity.ok(materias);
+    }
+
     @PostMapping
     public ResponseEntity<?> criarMateria(
             @RequestBody InserirMateriaRequest inserirMateriaRequest,
@@ -54,5 +63,13 @@ public class MateriaController {
             @RequestHeader("Authorization") String token) {
         service.removerPorId(id, token.substring(7));
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<MateriaEntity> atualizarMateria(
+            @PathVariable Long id,
+            @RequestBody AtualizarMateriaRequest atualizarMateriaRequest,
+            @RequestHeader("Authorization") String token) {
+        return ResponseEntity.ok(service.atualizar(atualizarMateriaRequest, id, token.substring(7)));
     }
 }

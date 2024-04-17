@@ -1,5 +1,6 @@
 package com.senai.projetofinal.service;
 
+import com.senai.projetofinal.controller.dto.request.materia.AtualizarMateriaRequest;
 import com.senai.projetofinal.controller.dto.request.materia.InserirMateriaRequest;
 import com.senai.projetofinal.controller.dto.response.materia.MateriaResponse;
 import com.senai.projetofinal.datasource.entity.CursoEntity;
@@ -11,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -58,6 +58,24 @@ public class MateriaService {
         return repository.findById(id).orElseThrow(() -> new NotFoundException("Matéria não encontrada"));
     }
 
+    public List<MateriaEntity> buscarMateriasPorCursoId(Long curso_id, String token) {
+        String role = tokenService.buscaCampo(token, "scope");
+
+        if (!"admin".equals(role) && !"pedagogico".equals(role)) {
+            throw new SecurityException("Usuário não autorizado");
+        }
+
+        List<MateriaEntity> materiasPorCurso = repository.findMateriaByCursoId(curso_id);
+
+        if (materiasPorCurso.isEmpty()) {
+            throw new NotFoundException("Nenhuma matéria encontrada para o id de curso informado");
+        }
+
+        log.info("Todas as matérias do curso de id {} listadas", curso_id);
+
+        return materiasPorCurso;
+    }
+
     public MateriaResponse salvar(InserirMateriaRequest inserirMateriaRequest, String token) {
         String role = tokenService.buscaCampo(token, "scope");
 
@@ -89,8 +107,8 @@ public class MateriaService {
     public void removerPorId(Long id, String token) {
         String role = tokenService.buscaCampo(token, "scope");
 
-        if (!"admin".equals(role) && !"pedagogico".equals(role)) {
-            throw new SecurityException("Usuário não autorizado");
+        if (!"admin".equals(role)) {
+            throw new SecurityException("Apenas um usuário admin pode remover uma matéria");
         }
 
         if (!repository.existsById(id)) {
@@ -99,5 +117,27 @@ public class MateriaService {
 
         log.info("Removendo matéria com o id {}", id);
         repository.deleteById(id);
+    }
+
+    public MateriaEntity atualizar(AtualizarMateriaRequest atualizarMateriaRequest, Long id, String token) {
+        String role = tokenService.buscaCampo(token, "scope");
+
+        if (!"admin".equals(role) && !"pedagogico".equals(role)) {
+            throw new SecurityException("Usuário não autorizado");
+        }
+
+        if (atualizarMateriaRequest.nome().isBlank()) {
+            throw new IllegalArgumentException("Nome não pode ser nulo ou vazio");
+        }
+
+        MateriaEntity entity = buscarPorId(id, token);
+
+        CursoEntity curso = cursoRepository.findById(atualizarMateriaRequest.curso()
+        ).orElseThrow(() -> new NotFoundException("Curso não encontrado"));
+
+        log.info("Atualizando matéria com o id {}", entity.getId());
+        entity.setNome(atualizarMateriaRequest.nome());
+        entity.setCurso(curso);
+        return repository.save(entity);
     }
 }
