@@ -1,5 +1,6 @@
 package com.senai.projetofinal.datasource.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -17,5 +18,6 @@ public class MateriaEntity {
 
     @ManyToOne
     @JoinColumn(name = "curso_id")
+    @JsonBackReference
     private CursoEntity curso;
 }
