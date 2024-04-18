@@ -90,7 +90,7 @@ public class CursoService {
             throw new SecurityException("Tentativa de atualizar não autorizada");
         }
 
-        if (atualizarCursoRequest.nome().isBlank()) {
+        if (atualizarCursoRequest.nome() == null || atualizarCursoRequest.nome().isBlank()) {
             throw new IllegalArgumentException("Nome não pode ser nulo ou vazio");
         }
 

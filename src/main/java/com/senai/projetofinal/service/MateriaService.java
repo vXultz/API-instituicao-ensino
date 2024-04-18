@@ -126,7 +126,7 @@ public class MateriaService {
             throw new SecurityException("Usuário não autorizado");
         }
 
-        if (atualizarMateriaRequest.nome().isBlank()) {
+        if (atualizarMateriaRequest.nome() == null || atualizarMateriaRequest.nome().isBlank()) {
             throw new IllegalArgumentException("Nome não pode ser nulo ou vazio");
         }
 
