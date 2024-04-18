@@ -91,7 +91,7 @@ public class AlunoService {
         String role = tokenService.buscaCampo(token, "scope");
 
         if (!"admin".equals(role)) {
-            throw new SecurityException("Usuário não autorizado");
+            throw new SecurityException("Apenas um admin pode remover um aluno");
         }
 
         if (!repository.existsById(id)) {
