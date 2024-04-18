@@ -4,7 +4,6 @@ import com.senai.projetofinal.controller.dto.request.materia.AtualizarMateriaReq
 import com.senai.projetofinal.controller.dto.request.materia.InserirMateriaRequest;
 import com.senai.projetofinal.controller.dto.response.materia.MateriaResponse;
 import com.senai.projetofinal.datasource.entity.MateriaEntity;
-import com.senai.projetofinal.service.CursoService;
 import com.senai.projetofinal.service.MateriaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +17,7 @@ public class MateriaController {
 
     private final MateriaService service;
 
-    public MateriaController(MateriaService service, CursoService cursoService) {
+    public MateriaController(MateriaService service) {
         this.service = service;
     }
 
