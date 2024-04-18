@@ -102,7 +102,7 @@ public class TurmaService {
         String role = tokenService.buscaCampo(token, "scope");
 
         if (!"admin".equals(role)) {
-            throw new SecurityException("Usuário não autorizado");
+            throw new SecurityException("Apenas um admin pode remover uma turma");
         }
 
         if (!repository.existsById(id)) {
