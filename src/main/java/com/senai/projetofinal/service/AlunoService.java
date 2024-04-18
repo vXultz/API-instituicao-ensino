@@ -1,5 +1,6 @@
 package com.senai.projetofinal.service;
 
+import com.senai.projetofinal.controller.dto.request.aluno.AtualizarAlunoRequest;
 import com.senai.projetofinal.controller.dto.request.aluno.InserirAlunoRequest;
 import com.senai.projetofinal.controller.dto.response.aluno.AlunoResponse;
 import com.senai.projetofinal.datasource.entity.AlunoEntity;
@@ -84,5 +85,43 @@ public class AlunoService {
                 alunoSalvo.getNome(),
                 alunoSalvo.getDataNascimento(),
                 alunoSalvo.getTurma());
+    }
+
+    public void removerPorId(Long id, String token) {
+        String role = tokenService.buscaCampo(token, "scope");
+
+        if (!"admin".equals(role)) {
+            throw new SecurityException("Usuário não autorizado");
+        }
+
+        if (!repository.existsById(id)) {
+            throw new NotFoundException("Nenhum aluno encontrado com o id passado");
+        }
+
+        log.info("Removendo aluno com id {}", id);
+        repository.deleteById(id);
+    }
+
+    public AlunoEntity atualizar(AtualizarAlunoRequest atualizarAlunoRequest, Long id, String token) {
+        String role = tokenService.buscaCampo(token, "scope");
+
+        if (!"admin".equals(role) && !"pedagogico".equals(role)) {
+            throw new SecurityException("Usuário não autorizado");
+        }
+
+        if (atualizarAlunoRequest.nome() == null || atualizarAlunoRequest.nome().isBlank()) {
+            throw new IllegalArgumentException("Nome não pode ser nulo ou vazio");
+        }
+
+        AlunoEntity entity = buscarPorId(id, token);
+
+        TurmaEntity turma = turmaRepository.findById(atualizarAlunoRequest.turma())
+                .orElseThrow(() -> new NotFoundException("Turma não encontrada"));
+
+        log.info("Atualizando aluno com o id {}", id);
+        entity.setNome(atualizarAlunoRequest.nome());
+        entity.setDataNascimento(atualizarAlunoRequest.dataNascimento());
+        entity.setTurma(turma);
+        return repository.save(entity);
     }
 }

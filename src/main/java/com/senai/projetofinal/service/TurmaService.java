@@ -101,7 +101,7 @@ public class TurmaService {
     public void removerPorid(Long id, String token) {
         String role = tokenService.buscaCampo(token, "scope");
 
-        if (!"admin".equals(role) && !"pedagogico".equals(role)) {
+        if (!"admin".equals(role)) {
             throw new SecurityException("Usuário não autorizado");
         }
 
