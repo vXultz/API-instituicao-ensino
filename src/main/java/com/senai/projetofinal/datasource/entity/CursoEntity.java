@@ -1,5 +1,6 @@
 package com.senai.projetofinal.datasource.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -20,6 +21,7 @@ public class CursoEntity {
     private String nome;
 
     @OneToMany(mappedBy = "curso", fetch = FetchType.EAGER)
+    @JsonBackReference
     private List<TurmaEntity> turmas;
 
     @OneToMany(mappedBy = "curso", fetch = FetchType.EAGER)

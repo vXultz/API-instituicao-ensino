@@ -113,7 +113,7 @@ public class DocenteService {
             throw new SecurityException("Tentativa de atualizar não autorizada");
         }
 
-        if (atualizarDocenteRequest.nome().isBlank()) {
+        if (atualizarDocenteRequest.nome() == null || atualizarDocenteRequest.nome().isBlank()) {
             throw new IllegalArgumentException("Nome não pode ser nulo ou vazio");
         }
 
