@@ -4,6 +4,7 @@ import com.senai.projetofinal.controller.dto.request.docente.AtualizarDocenteReq
 import com.senai.projetofinal.controller.dto.request.docente.InserirDocenteRequest;
 import com.senai.projetofinal.controller.dto.response.docente.DocenteResponse;
 import com.senai.projetofinal.datasource.entity.DocenteEntity;
+import com.senai.projetofinal.datasource.entity.PapelEnum;
 import com.senai.projetofinal.datasource.entity.UsuarioEntity;
 import com.senai.projetofinal.datasource.repository.DocenteRepository;
 import com.senai.projetofinal.datasource.repository.UsuarioRepository;
@@ -36,14 +37,21 @@ public class DocenteService {
             throw new SecurityException("Usuário não autorizado");
         }
 
-        List<DocenteEntity> docentes = repository.findAll();
+        List<DocenteEntity> docentes;
 
-        if(docentes.isEmpty()) {
+        if ("pedagogico".equals(role) || "recruiter".equals(role)) {
+            log.info("Todos os professores listados");
+            docentes = repository.findByUsuario_Papel_Nome(PapelEnum.PROFESSOR);
+        } else {
+            log.info("Todos os docentes listados");
+            docentes = repository.findAll();
+        }
+
+        if (docentes.isEmpty()) {
             throw new NotFoundException("Não há docentes cadastrados");
         }
 
-        log.info("Todos os docentes listados");
-        return repository.findAll();
+        return docentes;
     }
 
     public DocenteEntity buscarPorId(Long id, String token) {
@@ -52,8 +60,19 @@ public class DocenteService {
         if (!"admin".equals(role) && !"pedagogico".equals(role) && !"recruiter".equals(role)) {
             throw new SecurityException("Usuário não autorizado");
         }
-        log.info("Docente com id {} encontrado", id);
-        return repository.findById(id).orElseThrow(() -> new NotFoundException("Docente não encontrado"));
+        DocenteEntity docente = repository.findById(id).orElseThrow(() -> new NotFoundException("Docente não encontrado"));
+
+        if ("pedagogico".equals(role) || "recruiter".equals(role)) {
+            if (docente.getUsuario().getPapel().getNome() == PapelEnum.PROFESSOR) {
+                log.info("Professor com id {} encontrado", id);
+                return docente;
+            } else {
+                throw new SecurityException("Usuários pedagogicos ou recruiters só podem encontrar docente que sejam profressores");
+            }
+        } else {
+            log.info("Docente com o id {} encontrado", id);
+            return docente;
+        }
     }
 
     public DocenteResponse salvar(InserirDocenteRequest inserirDocenteRequest, String token) {
@@ -89,7 +108,7 @@ public class DocenteService {
                 docenteSalvo.getId(),
                 docenteSalvo.getNome(),
                 docenteSalvo.getUsuario()
-                );
+        );
     }
 
     public void removerPorId(Long id, String token) {
