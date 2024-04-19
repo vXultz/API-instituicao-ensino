@@ -4,6 +4,7 @@ import com.senai.projetofinal.controller.dto.request.nota.AtualizarNotaRequest;
 import com.senai.projetofinal.controller.dto.request.nota.InserirNotaRequest;
 import com.senai.projetofinal.controller.dto.response.nota.NotaResponse;
 import com.senai.projetofinal.datasource.entity.NotaEntity;
+import com.senai.projetofinal.infra.exception.error.NotFoundException;
 import com.senai.projetofinal.service.NotaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -83,11 +84,17 @@ public class NotaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<NotaEntity> atualizarNota(
+    public ResponseEntity<?> atualizarNota(
             @PathVariable Long id,
             @RequestBody AtualizarNotaRequest atualizarNotaRequest,
             @RequestHeader("Authorization") String token) {
-        return ResponseEntity.ok(service.atualizar(atualizarNotaRequest, id, token.substring(7)));
+        try {
+            return ResponseEntity.ok(service.atualizar(atualizarNotaRequest, id, token.substring(7)));
+        } catch (NotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
 }
