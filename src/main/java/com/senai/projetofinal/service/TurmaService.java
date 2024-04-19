@@ -130,12 +130,12 @@ public class TurmaService {
             throw new SecurityException("Usuário não autorizado");
         }
 
-        if (atualizarTurmaRequest.nome() == null || atualizarTurmaRequest.nome().isBlank()) {
-            throw new IllegalArgumentException("Nome não pode ser nulo ou vazio");
-        }
-
         if (!repository.existsById(id)) {
             throw new NotFoundException("Nenhuma turma encontrada com o id passado");
+        }
+
+        if (atualizarTurmaRequest.nome() == null || atualizarTurmaRequest.nome().isBlank()) {
+            throw new IllegalArgumentException("Nome não pode ser nulo ou vazio");
         }
 
         TurmaEntity entity = buscarPorId(id, token);
