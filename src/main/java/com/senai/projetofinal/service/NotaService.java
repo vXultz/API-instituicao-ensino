@@ -107,6 +107,13 @@ public class NotaService {
         MateriaEntity materia = materiaRepository.findById(inserirNotaRequest.materia())
                 .orElseThrow(() -> new NotFoundException("Matéria não encontrada"));
 
+        boolean materiaPertenceAoCurso = aluno.getTurma().getCurso().getMaterias()
+                .stream().anyMatch(m -> m.getId().equals(materia.getId()));
+
+        if(!materiaPertenceAoCurso){
+            throw new IllegalArgumentException("A matéria não pertence ao curso da turma que o aluno está matriculado");
+        }
+
         NotaEntity nota = new NotaEntity();
         nota.setAluno(aluno);
         nota.setDocente(docente);
