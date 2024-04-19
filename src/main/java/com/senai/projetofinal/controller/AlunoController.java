@@ -4,6 +4,7 @@ import com.senai.projetofinal.controller.dto.request.aluno.AtualizarAlunoRequest
 import com.senai.projetofinal.controller.dto.request.aluno.InserirAlunoRequest;
 import com.senai.projetofinal.controller.dto.response.aluno.AlunoResponse;
 import com.senai.projetofinal.datasource.entity.AlunoEntity;
+import com.senai.projetofinal.infra.exception.error.NotFoundException;
 import com.senai.projetofinal.service.AlunoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -64,7 +65,9 @@ public class AlunoController {
         try {
             AlunoEntity atualizarAlunoResponse = service.atualizar(atualizarAlunoRequest, id, token.substring(7));
             return new ResponseEntity<>(atualizarAlunoResponse, HttpStatus.OK);
-        } catch (Exception e) {
+        } catch (NotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
