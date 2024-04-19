@@ -4,6 +4,7 @@ import com.senai.projetofinal.controller.dto.request.docente.AtualizarDocenteReq
 import com.senai.projetofinal.controller.dto.request.docente.InserirDocenteRequest;
 import com.senai.projetofinal.controller.dto.response.docente.DocenteResponse;
 import com.senai.projetofinal.datasource.entity.DocenteEntity;
+import com.senai.projetofinal.datasource.entity.PapelEntity;
 import com.senai.projetofinal.datasource.entity.PapelEnum;
 import com.senai.projetofinal.datasource.entity.UsuarioEntity;
 import com.senai.projetofinal.datasource.repository.DocenteRepository;
@@ -78,7 +79,7 @@ public class DocenteService {
     public DocenteResponse salvar(InserirDocenteRequest inserirDocenteRequest, String token) {
         String role = tokenService.buscaCampo(token, "scope");
 
-        if (!"admin".equals(role)) {
+        if (!"admin".equals(role) && !"pedagogico".equals(role) && !"recruiter".equals(role)) {
             throw new SecurityException("Usuário não autorizado");
         }
 
@@ -90,6 +91,15 @@ public class DocenteService {
 
         UsuarioEntity usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        UsuarioEntity newDocenteUsuario = usuarioRepository.findById(inserirDocenteRequest.usuario())
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        String newDocentePapel = newDocenteUsuario.getPapel().getNome().toString();
+
+        if (("pedagogico".equals(role) || "recruiter".equals(role)) && !"professor".equals(newDocentePapel)) {
+            throw new SecurityException("Usuário pedagogico ou recruiter só pode salvar um docente com o papel professor");
+        }
 
         if (repository.existsByUsuarioId(inserirDocenteRequest.usuario())) {
             throw new RuntimeException("Um docente já existe com o Id de usuário passado");

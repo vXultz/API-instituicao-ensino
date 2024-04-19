@@ -43,11 +43,10 @@ public class DocenteController {
         try {
             DocenteResponse criarDocenteResponse = service.salvar(inserirDocenteRequest, token.substring(7));
             return new ResponseEntity<>(criarDocenteResponse, HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarDocente(
