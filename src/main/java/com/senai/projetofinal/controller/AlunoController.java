@@ -7,7 +7,6 @@ import com.senai.projetofinal.datasource.entity.AlunoEntity;
 import com.senai.projetofinal.service.AlunoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,11 +29,15 @@ public class AlunoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AlunoEntity> buscarAlunoPorId(
+    public ResponseEntity<?> buscarAlunoPorId(
             @PathVariable Long id,
             @RequestHeader("Authorization") String token) {
-        AlunoEntity aluno = service.buscarPorId(id, token.substring(7));
-        return ResponseEntity.ok(aluno);
+        try {
+            AlunoEntity aluno = service.buscarPorId(id, token.substring(7));
+            return new ResponseEntity<>(aluno, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping
@@ -50,18 +53,27 @@ public class AlunoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarAluno(
+    public ResponseEntity<?> deletarAluno(
             @PathVariable Long id,
             @RequestHeader("Authorization") String token) {
-        service.removerPorId(id, token.substring(7));
-        return ResponseEntity.noContent().build();
+        try {
+            service.removerPorId(id, token.substring(7));
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AlunoEntity> atualizarAluno(
+    public ResponseEntity<?> atualizarAluno(
             @PathVariable Long id,
             @RequestBody AtualizarAlunoRequest atualizarAlunoRequest,
             @RequestHeader("Authorization") String token) {
-        return ResponseEntity.ok(service.atualizar(atualizarAlunoRequest, id, token.substring(7)));
+        try {
+            AlunoEntity atualizarAlunoResponse = service.atualizar(atualizarAlunoRequest, id, token.substring(7));
+            return new ResponseEntity<>(atualizarAlunoResponse, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }

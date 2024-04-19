@@ -22,7 +22,6 @@ public class NotaService {
     private final NotaRepository repository;
 
     private final AlunoRepository alunoRepository;
-    private final AlunoService alunoService;
 
     private final DocenteRepository docenteRepository;
 
@@ -35,7 +34,6 @@ public class NotaService {
     public NotaService(NotaRepository repository, AlunoRepository alunoRepository, AlunoService alunoService, DocenteRepository docenteRepository, MateriaRepository materiaRepository, TurmaRepository turmaRepository, TokenService tokenService) {
         this.repository = repository;
         this.alunoRepository = alunoRepository;
-        this.alunoService = alunoService;
         this.docenteRepository = docenteRepository;
         this.materiaRepository = materiaRepository;
         this.turmaRepository = turmaRepository;
