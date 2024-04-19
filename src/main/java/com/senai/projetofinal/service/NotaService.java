@@ -168,6 +168,12 @@ public class NotaService {
 
 
     public BigDecimal calcularPontuacao(Long aluno_id, String token) {
+        String role = tokenService.buscaCampo(token, "scope");
+
+        if (!"admin".equals(role) && !"pedagogico".equals(role) && !"professor".equals(role) && !"aluno".equals(role)) {
+            throw new SecurityException("Usuário não autorizado");
+        }
+
         AlunoEntity aluno = alunoService.buscarPorId(aluno_id, token);
         List<NotaEntity> notasPorAluno = buscarNotasPorAlunoId(aluno_id, token);
         CursoEntity cursoTurma = buscarCursoPorTurmaId(aluno.getTurma().getId());
