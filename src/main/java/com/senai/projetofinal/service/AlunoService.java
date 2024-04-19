@@ -68,6 +68,7 @@ public class AlunoService {
             throw new IllegalArgumentException("Nome não pode ser nulo ou vazio");
         }
 
+
         TurmaEntity turma = turmaRepository.findById(inserirAlunoRequest.turma())
                 .orElseThrow(() -> new NotFoundException("Turma não encontrada"));
 
