@@ -29,15 +29,11 @@ public class AlunoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> buscarAlunoPorId(
+    public ResponseEntity<AlunoEntity> buscarAlunoPorId(
             @PathVariable Long id,
             @RequestHeader("Authorization") String token) {
-        try {
             AlunoEntity aluno = service.buscarPorId(id, token.substring(7));
             return new ResponseEntity<>(aluno, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
     }
 
     @PostMapping
@@ -53,15 +49,11 @@ public class AlunoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletarAluno(
+    public ResponseEntity<Void> deletarAluno(
             @PathVariable Long id,
             @RequestHeader("Authorization") String token) {
-        try {
             service.removerPorId(id, token.substring(7));
             return ResponseEntity.noContent().build();
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
     }
 
     @PutMapping("/{id}")

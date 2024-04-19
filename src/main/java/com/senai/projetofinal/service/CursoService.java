@@ -96,11 +96,11 @@ public class CursoService {
             throw new SecurityException("Tentativa de atualizar não autorizada");
         }
 
+        CursoEntity entity = buscarPorId(id, token);
+
         if (atualizarCursoRequest.nome() == null || atualizarCursoRequest.nome().isBlank()) {
             throw new IllegalArgumentException("Nome não pode ser nulo ou vazio");
         }
-
-        CursoEntity entity = buscarPorId(id, token);
 
         log.info("Atualizando curso com o id {}", entity.getId());
         entity.setNome(atualizarCursoRequest.nome());
