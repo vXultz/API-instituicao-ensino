@@ -11,4 +11,5 @@ public interface NotaRepository extends JpaRepository<NotaEntity, Long> {
 
     List<NotaEntity> findNotasByAlunoId(Long aluno_id);
 
+    List<NotaEntity> findNotasByDocenteId(Long docente_id);
 }

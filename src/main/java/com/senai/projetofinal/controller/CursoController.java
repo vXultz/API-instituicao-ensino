@@ -47,7 +47,7 @@ public class CursoController {
         try {
             CursoResponse criarCursoResponse = service.salvar(inserirCursoRequest, token.substring(7));
             return new ResponseEntity<>(criarCursoResponse, HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
@@ -61,10 +61,15 @@ public class CursoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CursoEntity> atualizarCurso(
+    public ResponseEntity<?> atualizarCurso(
             @RequestBody AtualizarCursoRequest atualizarCursoRequest,
             @PathVariable Long id,
             @RequestHeader("Authorization") String token) {
-        return ResponseEntity.ok(service.atualizar(atualizarCursoRequest, id, token.substring(7)));
+        try {
+            CursoEntity atualizarCurso = service.atualizar(atualizarCursoRequest, id, token.substring(7));
+            return new ResponseEntity<>(atualizarCurso, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }

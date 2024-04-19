@@ -5,8 +5,10 @@ import com.senai.projetofinal.controller.dto.request.aluno.InserirAlunoRequest;
 import com.senai.projetofinal.controller.dto.response.aluno.AlunoResponse;
 import com.senai.projetofinal.datasource.entity.AlunoEntity;
 import com.senai.projetofinal.datasource.entity.TurmaEntity;
+import com.senai.projetofinal.datasource.entity.UsuarioEntity;
 import com.senai.projetofinal.datasource.repository.AlunoRepository;
 import com.senai.projetofinal.datasource.repository.TurmaRepository;
+import com.senai.projetofinal.datasource.repository.UsuarioRepository;
 import com.senai.projetofinal.infra.exception.error.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,12 +21,15 @@ public class AlunoService {
 
     private final AlunoRepository repository;
 
+    private final UsuarioRepository usuarioRepository;
+
     private final TurmaRepository turmaRepository;
 
     private final TokenService tokenService;
 
-    public AlunoService(AlunoRepository repository, TurmaRepository turmaRepository, TokenService tokenService) {
+    public AlunoService(AlunoRepository repository, UsuarioRepository usuarioRepository, TurmaRepository turmaRepository, TokenService tokenService) {
         this.repository = repository;
+        this.usuarioRepository = usuarioRepository;
         this.turmaRepository = turmaRepository;
         this.tokenService = tokenService;
     }
@@ -68,12 +73,24 @@ public class AlunoService {
             throw new IllegalArgumentException("Nome não pode ser nulo ou vazio");
         }
 
+        UsuarioEntity newAlunoUsuario = usuarioRepository.findById(inserirAlunoRequest.usuario())
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        String newAlunoPapel = newAlunoUsuario.getPapel().getNome().toString();
+
+        if (!"aluno".equals(newAlunoPapel)) {
+            throw new IllegalArgumentException("Apenas um usuário com papel de aluno pode ser salvo como um aluno");
+        }
+
         TurmaEntity turma = turmaRepository.findById(inserirAlunoRequest.turma())
                 .orElseThrow(() -> new NotFoundException("Turma não encontrada"));
 
         AlunoEntity aluno = new AlunoEntity();
+        UsuarioEntity user = new UsuarioEntity();
+        user.setId(inserirAlunoRequest.usuario());
         aluno.setNome(inserirAlunoRequest.nome());
         aluno.setDataNascimento(inserirAlunoRequest.dataNascimento());
+        aluno.setUsuario(user);
         aluno.setTurma(turma);
 
         AlunoEntity alunoSalvo = repository.save(aluno);
@@ -84,6 +101,7 @@ public class AlunoService {
                 alunoSalvo.getId(),
                 alunoSalvo.getNome(),
                 alunoSalvo.getDataNascimento(),
+                alunoSalvo.getUsuario(),
                 alunoSalvo.getTurma());
     }
 

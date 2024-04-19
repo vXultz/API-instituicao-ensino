@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -44,7 +45,7 @@ public class NotaService {
     public List<NotaEntity> listarTodos(String token) {
         String role = tokenService.buscaCampo(token, "scope");
 
-        if (!"admin".equals(role) && !"pedagogico".equals(role) && !"professor".equals(role)) {
+        if (!"admin".equals(role) && !"pedagogico".equals(role)) {
             throw new SecurityException("Usuário não autorizado");
         }
 
@@ -77,6 +78,19 @@ public class NotaService {
             throw new SecurityException("Usuário não autorizado");
         }
 
+        Long usuario = Long.valueOf(tokenService.buscaCampo(token, "sub"));
+
+        AlunoEntity aluno = alunoRepository.findById(aluno_id)
+                .orElseThrow(() -> new NotFoundException("Aluno não encontrado"));
+
+        Long usuarioAluno = aluno.getUsuario().getId();
+
+        if ("admin".equals(role) || "pedagogico".equals(role) || "professor".equals(role)) {
+            return repository.findNotasByAlunoId(aluno_id);
+        } else if (!Objects.equals(usuario, usuarioAluno)) {
+            throw new SecurityException("Apenas notas com o seu Id podem ser acessadas");
+        }
+
         List<NotaEntity> notasPorAluno = repository.findNotasByAlunoId(aluno_id);
 
         if (notasPorAluno.isEmpty()) {
@@ -86,6 +100,37 @@ public class NotaService {
         log.info("Todas as notas do aluno de id {} listadas", aluno_id);
         return notasPorAluno;
     }
+
+    public List<NotaEntity> buscarNotasPorDocenteId(Long docente_id, String token) {
+        String role = tokenService.buscaCampo(token, "scope");
+
+        if (!"admin".equals(role) && !"pedagogico".equals(role) && !"professor".equals(role)) {
+            throw new SecurityException("Usuário não autorizado");
+        }
+
+        Long usuario = Long.valueOf(tokenService.buscaCampo(token, "sub"));
+
+        DocenteEntity docente = docenteRepository.findById(docente_id)
+                .orElseThrow(() -> new NotFoundException("Docente não encontrado"));
+
+        Long usuarioDocente = docente.getUsuario().getId();
+
+        if ("admin".equals(role) || "pedagogico".equals(role)) {
+            return repository.findNotasByDocenteId(docente_id);
+        } else if (!Objects.equals(usuario, usuarioDocente)) {
+            throw new SecurityException("Apenas notas com o seu Id podem ser acessadas");
+        }
+
+        List<NotaEntity> notasPorDocente = repository.findNotasByDocenteId(docente_id);
+
+        if (notasPorDocente.isEmpty()) {
+            throw new NotFoundException("Nenhuma nota encontrada para o id de docente passado");
+        }
+
+        log.info("Todas as notas do docente de id {} listadas", docente_id);
+        return notasPorDocente;
+    }
+
 
     public NotaResponse salvar(InserirNotaRequest inserirNotaRequest, String token) {
         String role = tokenService.buscaCampo(token, "scope");
@@ -166,7 +211,6 @@ public class NotaService {
     }
 
 
-
     public BigDecimal calcularPontuacao(Long aluno_id, String token) {
         String role = tokenService.buscaCampo(token, "scope");
 
@@ -174,7 +218,8 @@ public class NotaService {
             throw new SecurityException("Usuário não autorizado");
         }
 
-        AlunoEntity aluno = alunoService.buscarPorId(aluno_id, token);
+        AlunoEntity aluno = alunoRepository.findById(aluno_id)
+                .orElseThrow(() -> new NotFoundException("Aluno não encontrado"));
         List<NotaEntity> notasPorAluno = buscarNotasPorAlunoId(aluno_id, token);
         CursoEntity cursoTurma = buscarCursoPorTurmaId(aluno.getTurma().getId());
 

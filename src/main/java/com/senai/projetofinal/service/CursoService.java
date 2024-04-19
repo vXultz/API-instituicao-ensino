@@ -29,7 +29,7 @@ public class CursoService {
         String role = tokenService.buscaCampo(token, "scope");
 
         if (!"admin".equals(role) && !"pedagogico".equals(role)) {
-            throw new SecurityException("Tentativa de atualizar não autorizada");
+            throw new SecurityException("Usuário não autorizado");
         }
 
         List<CursoEntity> cursos = repository.findAll();
@@ -53,6 +53,12 @@ public class CursoService {
     }
 
     public CursoResponse salvar(InserirCursoRequest inserirCursoRequest, String token) {
+        String role = tokenService.buscaCampo(token, "scope");
+
+        if (!"admin".equals(role) && !"pedagogico".equals(role)) {
+            throw new SecurityException("Usuário não autorizado");
+        }
+
         if (inserirCursoRequest.nome() == null || inserirCursoRequest.nome().isBlank()) {
             throw new IllegalArgumentException("Nome não pode ser nulo ou vazio");
         }

@@ -37,6 +37,14 @@ public class NotaController {
         return ResponseEntity.ok(nota);
     }
 
+    @GetMapping("/docentes/{docente_id}")
+    public ResponseEntity<List<NotaEntity>> getNotasByDocente(
+            @PathVariable Long docente_id,
+            @RequestHeader("Authorization") String token) {
+        List<NotaEntity> notas = service.buscarNotasPorDocenteId(docente_id, token.substring(7));
+        return ResponseEntity.ok(notas);
+    }
+
     @GetMapping("/alunos/{aluno_id}")
     public ResponseEntity<List<NotaEntity>> getNotasByAluno(
             @PathVariable Long aluno_id,
@@ -44,6 +52,7 @@ public class NotaController {
         List<NotaEntity> notas = service.buscarNotasPorAlunoId(aluno_id, token.substring(7));
         return ResponseEntity.ok(notas);
     }
+
 
     @GetMapping("/alunos/{aluno_id}/pontuacao")
     public ResponseEntity<BigDecimal> getPontuacaoByAluno(
