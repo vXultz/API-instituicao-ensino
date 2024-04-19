@@ -22,8 +22,16 @@ public class UsuarioService {
     private final PapelRepository papelRepository;
 
     public void cadastraNovoLogin(
-            @RequestBody InserirLoginRequest inserirLoginRequest
-    ) {
+            @RequestBody InserirLoginRequest inserirLoginRequest) {
+
+        if (inserirLoginRequest.nomeLogin() == null || inserirLoginRequest.nomeLogin().isBlank()) {
+            throw new IllegalArgumentException("Login não pode ser nulo ou vazio");
+        }
+
+        if (inserirLoginRequest.senha() == null || inserirLoginRequest.senha().isBlank()) {
+            throw new IllegalArgumentException("Senha não pode ser nula ou vazia");
+        }
+
         boolean loginExiste = usuarioRepository.findByLogin(inserirLoginRequest.nomeLogin())
                 .isPresent();
 
@@ -37,7 +45,7 @@ public class UsuarioService {
                 bCryptPasswordEncoder.encode(inserirLoginRequest.senha())
         );
         usuario.setPapel(
-                papelRepository.findByNome(PapelEnum.valueOf(inserirLoginRequest.nomePapel()))
+                papelRepository.findByNome(PapelEnum.valueOf(inserirLoginRequest.nomePapel().toUpperCase()))
                         .orElseThrow(() -> new RuntimeException("Papel inválido ou inexistente"))
         );
 
