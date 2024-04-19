@@ -126,11 +126,11 @@ public class MateriaService {
             throw new SecurityException("Usuário não autorizado");
         }
 
+        MateriaEntity entity = buscarPorId(id, token);
+
         if (atualizarMateriaRequest.nome() == null || atualizarMateriaRequest.nome().isBlank()) {
             throw new IllegalArgumentException("Nome não pode ser nulo ou vazio");
         }
-
-        MateriaEntity entity = buscarPorId(id, token);
 
         CursoEntity curso = cursoRepository.findById(atualizarMateriaRequest.curso()
         ).orElseThrow(() -> new NotFoundException("Curso não encontrado"));

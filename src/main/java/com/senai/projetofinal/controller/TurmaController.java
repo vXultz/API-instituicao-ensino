@@ -4,6 +4,7 @@ import com.senai.projetofinal.controller.dto.request.turma.AtualizarTurmaRequest
 import com.senai.projetofinal.controller.dto.request.turma.InserirTurmaRequest;
 import com.senai.projetofinal.controller.dto.response.turma.TurmaResponse;
 import com.senai.projetofinal.datasource.entity.TurmaEntity;
+import com.senai.projetofinal.infra.exception.error.NotFoundException;
 import com.senai.projetofinal.service.TurmaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,10 +58,16 @@ public class TurmaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TurmaEntity> atualizarTurma(
+    public ResponseEntity<?> atualizarTurma(
             @PathVariable Long id,
             @RequestBody AtualizarTurmaRequest atualizarTurmaRequest,
             @RequestHeader("Authorization") String token) {
-        return ResponseEntity.ok(service.atualizar(atualizarTurmaRequest, id, token.substring(7)));
+        try {
+            return ResponseEntity.ok(service.atualizar(atualizarTurmaRequest, id, token.substring(7)));
+        } catch (NotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }

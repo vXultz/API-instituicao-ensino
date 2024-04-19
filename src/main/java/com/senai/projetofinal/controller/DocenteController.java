@@ -4,6 +4,7 @@ import com.senai.projetofinal.controller.dto.request.docente.AtualizarDocenteReq
 import com.senai.projetofinal.controller.dto.request.docente.InserirDocenteRequest;
 import com.senai.projetofinal.controller.dto.response.docente.DocenteResponse;
 import com.senai.projetofinal.datasource.entity.DocenteEntity;
+import com.senai.projetofinal.infra.exception.error.NotFoundException;
 import com.senai.projetofinal.service.DocenteService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -64,7 +65,9 @@ public class DocenteController {
         try {
             DocenteEntity atualizarDocente = service.atualizar(atualizarDocenteRequest, id, token.substring(7));
             return new ResponseEntity<>(atualizarDocente, HttpStatus.OK);
-        } catch (Exception e) {
+        } catch (NotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }

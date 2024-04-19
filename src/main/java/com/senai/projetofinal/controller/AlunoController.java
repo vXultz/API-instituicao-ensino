@@ -4,10 +4,10 @@ import com.senai.projetofinal.controller.dto.request.aluno.AtualizarAlunoRequest
 import com.senai.projetofinal.controller.dto.request.aluno.InserirAlunoRequest;
 import com.senai.projetofinal.controller.dto.response.aluno.AlunoResponse;
 import com.senai.projetofinal.datasource.entity.AlunoEntity;
+import com.senai.projetofinal.infra.exception.error.NotFoundException;
 import com.senai.projetofinal.service.AlunoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,8 +33,8 @@ public class AlunoController {
     public ResponseEntity<AlunoEntity> buscarAlunoPorId(
             @PathVariable Long id,
             @RequestHeader("Authorization") String token) {
-        AlunoEntity aluno = service.buscarPorId(id, token.substring(7));
-        return ResponseEntity.ok(aluno);
+            AlunoEntity aluno = service.buscarPorId(id, token.substring(7));
+            return new ResponseEntity<>(aluno, HttpStatus.OK);
     }
 
     @PostMapping
@@ -53,15 +53,22 @@ public class AlunoController {
     public ResponseEntity<Void> deletarAluno(
             @PathVariable Long id,
             @RequestHeader("Authorization") String token) {
-        service.removerPorId(id, token.substring(7));
-        return ResponseEntity.noContent().build();
+            service.removerPorId(id, token.substring(7));
+            return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AlunoEntity> atualizarAluno(
+    public ResponseEntity<?> atualizarAluno(
             @PathVariable Long id,
             @RequestBody AtualizarAlunoRequest atualizarAlunoRequest,
             @RequestHeader("Authorization") String token) {
-        return ResponseEntity.ok(service.atualizar(atualizarAlunoRequest, id, token.substring(7)));
+        try {
+            AlunoEntity atualizarAlunoResponse = service.atualizar(atualizarAlunoRequest, id, token.substring(7));
+            return new ResponseEntity<>(atualizarAlunoResponse, HttpStatus.OK);
+        } catch (NotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }

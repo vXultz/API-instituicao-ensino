@@ -43,6 +43,9 @@ public class DocenteService {
         if ("pedagogico".equals(role) || "recruiter".equals(role)) {
             log.info("Todos os professores listados");
             docentes = repository.findByUsuario_Papel_Nome(PapelEnum.PROFESSOR);
+            if (docentes.isEmpty()) {
+                throw new NotFoundException("Não há professores cadastrados");
+            }
         } else {
             log.info("Todos os docentes listados");
             docentes = repository.findAll();
@@ -142,11 +145,11 @@ public class DocenteService {
             throw new SecurityException("Tentativa de atualizar não autorizada");
         }
 
+        DocenteEntity entity = buscarPorId(id, token);
+
         if (atualizarDocenteRequest.nome() == null || atualizarDocenteRequest.nome().isBlank()) {
             throw new IllegalArgumentException("Nome não pode ser nulo ou vazio");
         }
-
-        DocenteEntity entity = buscarPorId(id, token);
 
         log.info("Atualizando docente com o id {}", entity.getId());
         entity.setNome(atualizarDocenteRequest.nome());

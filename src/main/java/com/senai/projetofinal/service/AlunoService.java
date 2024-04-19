@@ -127,11 +127,11 @@ public class AlunoService {
             throw new SecurityException("Usuário não autorizado");
         }
 
+        AlunoEntity entity = buscarPorId(id, token);
+
         if (atualizarAlunoRequest.nome() == null || atualizarAlunoRequest.nome().isBlank()) {
             throw new IllegalArgumentException("Nome não pode ser nulo ou vazio");
         }
-
-        AlunoEntity entity = buscarPorId(id, token);
 
         TurmaEntity turma = turmaRepository.findById(atualizarAlunoRequest.turma())
                 .orElseThrow(() -> new NotFoundException("Turma não encontrada"));

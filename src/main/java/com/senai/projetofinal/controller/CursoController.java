@@ -8,6 +8,7 @@ import com.senai.projetofinal.controller.dto.response.curso.CursoResponse;
 import com.senai.projetofinal.controller.dto.response.docente.DocenteResponse;
 import com.senai.projetofinal.datasource.entity.CursoEntity;
 import com.senai.projetofinal.datasource.entity.DocenteEntity;
+import com.senai.projetofinal.infra.exception.error.NotFoundException;
 import com.senai.projetofinal.service.CursoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,8 +37,8 @@ public class CursoController {
     public ResponseEntity<CursoEntity> buscarCursoPorId(
             @PathVariable Long id,
             @RequestHeader("Authorization") String token) {
-        CursoEntity curso = service.buscarPorId(id, token.substring(7));
-        return ResponseEntity.ok().body(curso);
+            CursoEntity curso = service.buscarPorId(id, token.substring(7));
+            return ResponseEntity.ok().body(curso);
     }
 
     @PostMapping
@@ -56,8 +57,8 @@ public class CursoController {
     public ResponseEntity<Void> deletarCurso(
             @PathVariable Long id,
             @RequestHeader("Authorization") String token) {
-        service.removerPorId(id, token.substring(7));
-        return ResponseEntity.noContent().build();
+            service.removerPorId(id, token.substring(7));
+            return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
@@ -68,7 +69,9 @@ public class CursoController {
         try {
             CursoEntity atualizarCurso = service.atualizar(atualizarCursoRequest, id, token.substring(7));
             return new ResponseEntity<>(atualizarCurso, HttpStatus.OK);
-        } catch (Exception e) {
+        } catch (NotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }

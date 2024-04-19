@@ -4,6 +4,7 @@ import com.senai.projetofinal.controller.dto.request.materia.AtualizarMateriaReq
 import com.senai.projetofinal.controller.dto.request.materia.InserirMateriaRequest;
 import com.senai.projetofinal.controller.dto.response.materia.MateriaResponse;
 import com.senai.projetofinal.datasource.entity.MateriaEntity;
+import com.senai.projetofinal.infra.exception.error.NotFoundException;
 import com.senai.projetofinal.service.MateriaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -65,10 +66,16 @@ public class MateriaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MateriaEntity> atualizarMateria(
+    public ResponseEntity<?> atualizarMateria(
             @PathVariable Long id,
             @RequestBody AtualizarMateriaRequest atualizarMateriaRequest,
             @RequestHeader("Authorization") String token) {
-        return ResponseEntity.ok(service.atualizar(atualizarMateriaRequest, id, token.substring(7)));
+        try {
+            return ResponseEntity.ok(service.atualizar(atualizarMateriaRequest, id, token.substring(7)));
+        } catch (NotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }

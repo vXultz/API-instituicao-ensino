@@ -22,7 +22,6 @@ public class NotaService {
     private final NotaRepository repository;
 
     private final AlunoRepository alunoRepository;
-    private final AlunoService alunoService;
 
     private final DocenteRepository docenteRepository;
 
@@ -35,7 +34,6 @@ public class NotaService {
     public NotaService(NotaRepository repository, AlunoRepository alunoRepository, AlunoService alunoService, DocenteRepository docenteRepository, MateriaRepository materiaRepository, TurmaRepository turmaRepository, TokenService tokenService) {
         this.repository = repository;
         this.alunoRepository = alunoRepository;
-        this.alunoService = alunoService;
         this.docenteRepository = docenteRepository;
         this.materiaRepository = materiaRepository;
         this.turmaRepository = turmaRepository;
@@ -199,11 +197,11 @@ public class NotaService {
             throw new SecurityException("Usuário não autorizado");
         }
 
+        NotaEntity entity = buscarPorId(id, token);
+
         if (atualizarNotaRequest.valor() == null || atualizarNotaRequest.valor().isBlank()) {
             throw new IllegalArgumentException("Valor não pode ser nulo ou vazio");
         }
-
-        NotaEntity entity = buscarPorId(id, token);
 
         log.info("Atualizando nota com o id {}", entity.getId());
         entity.setValor(atualizarNotaRequest.valor());
@@ -220,6 +218,7 @@ public class NotaService {
 
         AlunoEntity aluno = alunoRepository.findById(aluno_id)
                 .orElseThrow(() -> new NotFoundException("Aluno não encontrado"));
+
         List<NotaEntity> notasPorAluno = buscarNotasPorAlunoId(aluno_id, token);
         CursoEntity cursoTurma = buscarCursoPorTurmaId(aluno.getTurma().getId());
 
