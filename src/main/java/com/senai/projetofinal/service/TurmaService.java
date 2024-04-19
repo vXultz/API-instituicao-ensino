@@ -6,9 +6,11 @@ import com.senai.projetofinal.controller.dto.response.turma.TurmaResponse;
 import com.senai.projetofinal.datasource.entity.CursoEntity;
 import com.senai.projetofinal.datasource.entity.DocenteEntity;
 import com.senai.projetofinal.datasource.entity.TurmaEntity;
+import com.senai.projetofinal.datasource.entity.UsuarioEntity;
 import com.senai.projetofinal.datasource.repository.CursoRepository;
 import com.senai.projetofinal.datasource.repository.DocenteRepository;
 import com.senai.projetofinal.datasource.repository.TurmaRepository;
+import com.senai.projetofinal.datasource.repository.UsuarioRepository;
 import com.senai.projetofinal.infra.exception.error.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,14 +23,17 @@ public class TurmaService {
 
     private final TurmaRepository repository;
 
+    private final UsuarioRepository usuarioRepository;
+
     private final DocenteRepository docenteRepository;
 
     private final CursoRepository cursoRepository;
 
     private final TokenService tokenService;
 
-    public TurmaService(TurmaRepository repository, DocenteRepository docenteRepository, CursoRepository cursoRepository, TokenService tokenService) {
+    public TurmaService(TurmaRepository repository, UsuarioRepository usuarioRepository, DocenteRepository docenteRepository, CursoRepository cursoRepository, TokenService tokenService) {
         this.repository = repository;
+        this.usuarioRepository = usuarioRepository;
         this.docenteRepository = docenteRepository;
         this.cursoRepository = cursoRepository;
         this.tokenService = tokenService;
@@ -80,6 +85,11 @@ public class TurmaService {
         DocenteEntity docente = docenteRepository.findById(inserirTurmaRequest.docente())
                 .orElseThrow(() -> new NotFoundException("Docente não encontrado"));
 
+        String docenteProfessor = docente.getUsuario().getPapel().getNome().toString();
+
+        if (!"professor".equals(docenteProfessor)) {
+            throw new IllegalArgumentException("Apenas um docente com papel professor pode ser atribuído a uma turma");
+        }
 
         TurmaEntity turma = new TurmaEntity();
         turma.setNome(inserirTurmaRequest.nome());
@@ -135,6 +145,12 @@ public class TurmaService {
 
         DocenteEntity docente = docenteRepository.findById(atualizarTurmaRequest.docente())
                 .orElseThrow(() -> new NotFoundException("Docente não encontrado"));
+
+        String docenteProfessor = docente.getUsuario().getPapel().getNome().toString();
+
+        if (!"professor".equals(docenteProfessor)) {
+            throw new IllegalArgumentException("Apenas um docente com papel professor pode ser atribuído a uma turma");
+        }
 
         log.info("Atualizando turma com o id {}", entity.getId());
 
