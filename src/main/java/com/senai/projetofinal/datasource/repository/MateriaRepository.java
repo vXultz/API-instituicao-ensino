@@ -10,4 +10,5 @@ import java.util.List;
 public interface MateriaRepository extends JpaRepository<MateriaEntity, Long> {
 
     List<MateriaEntity> findMateriaByCursoId(Long curso_id);
+
 }

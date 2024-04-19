@@ -3,19 +3,16 @@ package com.senai.projetofinal.service;
 import com.senai.projetofinal.controller.dto.request.nota.AtualizarNotaRequest;
 import com.senai.projetofinal.controller.dto.request.nota.InserirNotaRequest;
 import com.senai.projetofinal.controller.dto.response.nota.NotaResponse;
-import com.senai.projetofinal.datasource.entity.AlunoEntity;
-import com.senai.projetofinal.datasource.entity.DocenteEntity;
-import com.senai.projetofinal.datasource.entity.MateriaEntity;
-import com.senai.projetofinal.datasource.entity.NotaEntity;
-import com.senai.projetofinal.datasource.repository.AlunoRepository;
-import com.senai.projetofinal.datasource.repository.DocenteRepository;
-import com.senai.projetofinal.datasource.repository.MateriaRepository;
-import com.senai.projetofinal.datasource.repository.NotaRepository;
+import com.senai.projetofinal.datasource.entity.*;
+import com.senai.projetofinal.datasource.repository.*;
 import com.senai.projetofinal.infra.exception.error.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -24,18 +21,23 @@ public class NotaService {
     private final NotaRepository repository;
 
     private final AlunoRepository alunoRepository;
+    private final AlunoService alunoService;
 
     private final DocenteRepository docenteRepository;
 
     private final MateriaRepository materiaRepository;
 
+    private final TurmaRepository turmaRepository;
+
     private final TokenService tokenService;
 
-    public NotaService(NotaRepository repository, AlunoRepository alunoRepository, DocenteRepository docenteRepository, MateriaRepository materiaRepository, TokenService tokenService) {
+    public NotaService(NotaRepository repository, AlunoRepository alunoRepository, AlunoService alunoService, DocenteRepository docenteRepository, MateriaRepository materiaRepository, TurmaRepository turmaRepository, TokenService tokenService) {
         this.repository = repository;
         this.alunoRepository = alunoRepository;
+        this.alunoService = alunoService;
         this.docenteRepository = docenteRepository;
         this.materiaRepository = materiaRepository;
+        this.turmaRepository = turmaRepository;
         this.tokenService = tokenService;
     }
 
@@ -105,6 +107,13 @@ public class NotaService {
         MateriaEntity materia = materiaRepository.findById(inserirNotaRequest.materia())
                 .orElseThrow(() -> new NotFoundException("Matéria não encontrada"));
 
+        boolean materiaPertenceAoCurso = aluno.getTurma().getCurso().getMaterias()
+                .stream().anyMatch(m -> m.getId().equals(materia.getId()));
+
+        if(!materiaPertenceAoCurso){
+            throw new IllegalArgumentException("A matéria não pertence ao curso da turma que o aluno está matriculado");
+        }
+
         NotaEntity nota = new NotaEntity();
         nota.setAluno(aluno);
         nota.setDocente(docente);
@@ -154,5 +163,44 @@ public class NotaService {
         log.info("Atualizando nota com o id {}", entity.getId());
         entity.setValor(atualizarNotaRequest.valor());
         return repository.save(entity);
+    }
+
+
+
+    public BigDecimal calcularPontuacao(Long aluno_id, String token) {
+        String role = tokenService.buscaCampo(token, "scope");
+
+        if (!"admin".equals(role) && !"pedagogico".equals(role) && !"professor".equals(role) && !"aluno".equals(role)) {
+            throw new SecurityException("Usuário não autorizado");
+        }
+
+        AlunoEntity aluno = alunoService.buscarPorId(aluno_id, token);
+        List<NotaEntity> notasPorAluno = buscarNotasPorAlunoId(aluno_id, token);
+        CursoEntity cursoTurma = buscarCursoPorTurmaId(aluno.getTurma().getId());
+
+        int totalMaterias = cursoTurma.getMaterias().size();
+
+        BigDecimal soma = BigDecimal.ZERO;
+        for (NotaEntity nota : notasPorAluno) {
+            BigDecimal valorNota = new BigDecimal(nota.getValor());
+            soma = soma.add(valorNota);
+        }
+
+        if (notasPorAluno.isEmpty()) {
+            return BigDecimal.ZERO;
+        }
+
+        BigDecimal media = soma.divide(BigDecimal.valueOf(totalMaterias), RoundingMode.HALF_UP);
+        return media.multiply(BigDecimal.TEN);
+    }
+
+    public CursoEntity buscarCursoPorTurmaId(Long turmaId) {
+        Optional<TurmaEntity> turma = turmaRepository.findById(turmaId);
+
+        if (turma.isEmpty()) {
+            throw new NotFoundException("Turma não encontrada");
+        }
+
+        return turma.get().getCurso();
     }
 }

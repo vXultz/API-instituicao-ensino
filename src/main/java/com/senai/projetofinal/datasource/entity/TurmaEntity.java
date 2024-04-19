@@ -28,5 +28,4 @@ public class TurmaEntity {
     @OneToMany(mappedBy = "turma", fetch = FetchType.EAGER)
     @JsonBackReference
     private List<AlunoEntity> alunos;
-
 }
