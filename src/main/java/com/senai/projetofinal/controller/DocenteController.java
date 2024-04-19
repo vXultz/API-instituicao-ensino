@@ -57,10 +57,15 @@ public class DocenteController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<DocenteEntity> atualizarDocente(
+    public ResponseEntity<?> atualizarDocente(
             @RequestBody AtualizarDocenteRequest atualizarDocenteRequest,
             @PathVariable Long id,
             @RequestHeader("Authorization") String token) {
-        return ResponseEntity.ok(service.atualizar(atualizarDocenteRequest, id, token.substring(7)));
+        try {
+            DocenteEntity atualizarDocente = service.atualizar(atualizarDocenteRequest, id, token.substring(7));
+            return new ResponseEntity<>(atualizarDocente, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }
