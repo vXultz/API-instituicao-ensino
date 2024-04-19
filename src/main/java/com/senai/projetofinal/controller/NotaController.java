@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -44,6 +45,14 @@ public class NotaController {
         return ResponseEntity.ok(notas);
     }
 
+    @GetMapping("/alunos/{aluno_id}/pontuacao")
+    public ResponseEntity<BigDecimal> getPontuacaoByAluno(
+            @PathVariable Long aluno_id,
+            @RequestHeader("Authorization") String token) {
+        BigDecimal pontuacao = service.calcularPontuacao(aluno_id, token.substring(7));
+        return ResponseEntity.ok(pontuacao);
+    }
+
     @PostMapping
     public ResponseEntity<?> criarNota(
             @RequestBody InserirNotaRequest inserirNotaRequest,
@@ -71,4 +80,5 @@ public class NotaController {
             @RequestHeader("Authorization") String token) {
         return ResponseEntity.ok(service.atualizar(atualizarNotaRequest, id, token.substring(7)));
     }
+
 }
