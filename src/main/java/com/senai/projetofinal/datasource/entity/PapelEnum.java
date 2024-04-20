@@ -21,7 +21,4 @@ public enum PapelEnum {
         return nome;
     }
 
-    public String getNome() {
-        return nome;
-    }
 }

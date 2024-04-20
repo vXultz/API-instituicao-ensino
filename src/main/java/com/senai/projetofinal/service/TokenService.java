@@ -6,6 +6,7 @@ import com.senai.projetofinal.datasource.entity.UsuarioEntity;
 import com.senai.projetofinal.datasource.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
@@ -35,14 +36,23 @@ public class TokenService {
                 .findByLogin(loginRequest.login())
                 .orElseThrow(
                         () ->{
-                            log.error("Erro, usuário não existe");
-                            return new RuntimeException("Erro, usuário não existe");
+                            log.error("Usuário incorreto");
+                            return new BadCredentialsException("Usuário incorreto");
                         }
                 );
 
+
+        if (loginRequest.login() == null || loginRequest.login().isBlank()) {
+            throw new IllegalArgumentException("Login não pode ser nulo ou vazio");
+        }
+
+        if (loginRequest.senha() == null || loginRequest.senha().isBlank()) {
+            throw new IllegalArgumentException("Senha não pode ser nula ou vazia");
+        }
+
         if (!usuarioEntity.senhaValida(loginRequest, bCryptPasswordEncoder)){
-            log.error("Erro, senha incorreta");
-            throw new RuntimeException("Erro, senha incorreta");
+            log.error("Senha incorreta");
+            throw new BadCredentialsException("Senha incorreta");
         }
 
         Instant now = Instant.now();

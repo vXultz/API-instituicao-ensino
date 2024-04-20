@@ -4,6 +4,7 @@ import com.senai.projetofinal.controller.dto.request.docente.AtualizarDocenteReq
 import com.senai.projetofinal.controller.dto.request.docente.InserirDocenteRequest;
 import com.senai.projetofinal.controller.dto.response.docente.DocenteResponse;
 import com.senai.projetofinal.datasource.entity.DocenteEntity;
+import com.senai.projetofinal.infra.exception.error.NotFoundException;
 import com.senai.projetofinal.service.DocenteService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,11 +30,15 @@ public class DocenteController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DocenteEntity> buscarDocentePorId(
+    public ResponseEntity<?> buscarDocentePorId(
             @PathVariable Long id,
             @RequestHeader("Authorization") String token) {
-        DocenteEntity docente = service.buscarPorId(id, token.substring(7));
-        return ResponseEntity.ok().body(docente);
+        try {
+            DocenteEntity docente = service.buscarPorId(id, token.substring(7));
+            return ResponseEntity.ok().body(docente);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping
@@ -43,11 +48,10 @@ public class DocenteController {
         try {
             DocenteResponse criarDocenteResponse = service.salvar(inserirDocenteRequest, token.substring(7));
             return new ResponseEntity<>(criarDocenteResponse, HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarDocente(
@@ -58,10 +62,17 @@ public class DocenteController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<DocenteEntity> atualizarDocente(
+    public ResponseEntity<?> atualizarDocente(
             @RequestBody AtualizarDocenteRequest atualizarDocenteRequest,
             @PathVariable Long id,
             @RequestHeader("Authorization") String token) {
-        return ResponseEntity.ok(service.atualizar(atualizarDocenteRequest, id, token.substring(7)));
+        try {
+            DocenteEntity atualizarDocente = service.atualizar(atualizarDocenteRequest, id, token.substring(7));
+            return new ResponseEntity<>(atualizarDocente, HttpStatus.OK);
+        } catch (NotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }
