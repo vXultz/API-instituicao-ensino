@@ -24,43 +24,62 @@ public class NotaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<NotaEntity>> listarTodasNotas(
+    public ResponseEntity<?> listarTodasNotas(
             @RequestHeader("Authorization") String token) {
-        List<NotaEntity> listarNotas = service.listarTodos(token.substring(7));
-        return ResponseEntity.ok().body(listarNotas);
+        try {
+            List<NotaEntity> listarNotas = service.listarTodos(token.substring(7));
+            return ResponseEntity.ok().body(listarNotas);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<NotaEntity> buscarNotaPorId(
+    public ResponseEntity<?> buscarNotaPorId(
             @PathVariable Long id,
             @RequestHeader("Authorization") String token) {
-        NotaEntity nota = service.buscarPorId(id, token.substring(7));
-        return ResponseEntity.ok(nota);
+        try {
+            NotaEntity nota = service.buscarPorId(id, token.substring(7));
+            return ResponseEntity.ok(nota);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/docentes/{docente_id}")
-    public ResponseEntity<List<NotaEntity>> getNotasByDocente(
+    public ResponseEntity<?> getNotasByDocente(
             @PathVariable Long docente_id,
             @RequestHeader("Authorization") String token) {
-        List<NotaEntity> notas = service.buscarNotasPorDocenteId(docente_id, token.substring(7));
-        return ResponseEntity.ok(notas);
+        try {
+            List<NotaEntity> notas = service.buscarNotasPorDocenteId(docente_id, token.substring(7));
+            return ResponseEntity.ok(notas);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
-
     @GetMapping("/alunos/{aluno_id}")
-    public ResponseEntity<List<NotaEntity>> getNotasByAluno(
+    public ResponseEntity<?> getNotasByAluno(
             @PathVariable Long aluno_id,
             @RequestHeader("Authorization") String token) {
-        List<NotaEntity> notas = service.buscarNotasPorAlunoId(aluno_id, token.substring(7));
-        return ResponseEntity.ok(notas);
+        try {
+            List<NotaEntity> notas = service.buscarNotasPorAlunoId(aluno_id, token.substring(7));
+            return ResponseEntity.ok(notas);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
 
     @GetMapping("/alunos/{aluno_id}/pontuacao")
-    public ResponseEntity<BigDecimal> getPontuacaoByAluno(
+    public ResponseEntity<?> getPontuacaoByAluno(
             @PathVariable Long aluno_id,
             @RequestHeader("Authorization") String token) {
-        BigDecimal pontuacao = service.calcularPontuacao(aluno_id, token.substring(7));
-        return ResponseEntity.ok(pontuacao);
+        try {
+            BigDecimal pontuacao = service.calcularPontuacao(aluno_id, token.substring(7));
+            return ResponseEntity.ok(pontuacao);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping
@@ -76,11 +95,15 @@ public class NotaController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarNota(
+    public ResponseEntity<?> deletarNota(
             @PathVariable Long id,
             @RequestHeader("Authorization") String token) {
-        service.removerPorId(id, token.substring(7));
-        return ResponseEntity.noContent().build();
+        try {
+            service.removerPorId(id, token.substring(7));
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping("/{id}")

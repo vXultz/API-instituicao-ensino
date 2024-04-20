@@ -50,11 +50,15 @@ public class AlunoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarAluno(
+    public ResponseEntity<?> deletarAluno(
             @PathVariable Long id,
             @RequestHeader("Authorization") String token) {
+        try {
             service.removerPorId(id, token.substring(7));
             return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping("/{id}")
