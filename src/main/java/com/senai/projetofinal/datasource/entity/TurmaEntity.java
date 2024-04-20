@@ -1,5 +1,6 @@
 package com.senai.projetofinal.datasource.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -24,7 +25,7 @@ public class TurmaEntity {
     @ManyToOne
     private CursoEntity curso;
 
-    @OneToMany(mappedBy = "turma")
+    @OneToMany(mappedBy = "turma", fetch = FetchType.EAGER)
+    @JsonBackReference
     private List<AlunoEntity> alunos;
-
 }

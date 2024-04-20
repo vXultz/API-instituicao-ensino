@@ -16,6 +16,10 @@ public class AlunoEntity {
 
     private String dataNascimento;
 
+    @OneToOne
+    @JoinColumn(name = "usuario_id")
+    private UsuarioEntity usuario;
+
     @ManyToOne
     @JoinColumn(name = "turma_id")
     private TurmaEntity turma;

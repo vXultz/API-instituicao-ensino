@@ -25,5 +25,12 @@ public class NotaEntity {
 
     private String valor;
 
-    private LocalDate data;
+    private LocalDate data = LocalDate.now();
+
+    @PrePersist
+    public void prePersist() {
+        if (data == null) {
+            data = LocalDate.now();
+        }
+    }
 }
