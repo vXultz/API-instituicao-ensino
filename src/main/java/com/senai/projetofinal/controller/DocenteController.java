@@ -30,11 +30,15 @@ public class DocenteController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DocenteEntity> buscarDocentePorId(
+    public ResponseEntity<?> buscarDocentePorId(
             @PathVariable Long id,
             @RequestHeader("Authorization") String token) {
-        DocenteEntity docente = service.buscarPorId(id, token.substring(7));
-        return ResponseEntity.ok().body(docente);
+        try {
+            DocenteEntity docente = service.buscarPorId(id, token.substring(7));
+            return ResponseEntity.ok().body(docente);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping

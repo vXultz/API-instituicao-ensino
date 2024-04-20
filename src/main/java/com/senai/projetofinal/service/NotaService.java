@@ -61,7 +61,7 @@ public class NotaService {
     public NotaEntity buscarPorId(Long id, String token) {
         String role = tokenService.buscaCampo(token, "scope");
 
-        if (!"admin".equals(role) && !"pedagogico".equals(role) && !"professor".equals(role) && !"aluno".equals(role)) {
+        if (!"admin".equals(role) && !"pedagogico".equals(role) && !"professor".equals(role)) {
             throw new SecurityException("Usuário não autorizado");
         }
 
@@ -216,8 +216,18 @@ public class NotaService {
             throw new SecurityException("Usuário não autorizado");
         }
 
+        Long usuario = Long.valueOf(tokenService.buscaCampo(token, "sub"));
+
         AlunoEntity aluno = alunoRepository.findById(aluno_id)
                 .orElseThrow(() -> new NotFoundException("Aluno não encontrado"));
+
+        Long usuarioAluno = aluno.getUsuario().getId();
+
+        if ("admin".equals(role) || "pedagogico".equals(role) || "professor".equals(role)) {
+            if (!Objects.equals(usuario, usuarioAluno)) {
+                throw new SecurityException("Apenas pontuação com o seu Id podem ser acessadas");
+            }
+        }
 
         List<NotaEntity> notasPorAluno = buscarNotasPorAlunoId(aluno_id, token);
         CursoEntity cursoTurma = buscarCursoPorTurmaId(aluno.getTurma().getId());
