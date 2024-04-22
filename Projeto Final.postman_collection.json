@@ -1,0 +1,1189 @@
+{
+	"info": {
+		"_postman_id": "abc6531b-ea3a-49ca-94ef-df31500c95aa",
+		"name": "Projeto Final",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33277055"
+	},
+	"item": [
+		{
+			"name": "Token e Cadastro",
+			"item": [
+				{
+					"name": "token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"login\": \"admin\",\r\n    \"senha\": \"1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/login",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cadastro",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzaXN0ZW1hLWVzY29sYXIiLCJzdWIiOiIxIiwiZXhwIjoxNzEzNjU5Mjg1LCJpYXQiOjE3MTM2MjMyODUsInNjb3BlIjoiYWRtaW4ifQ.oeZnptOUazrKYVHetlVipd54CiDIBIwvVUMlPajHGJYkX_ivo1cW2Bw9tX9xkA0DGkJK8afEvRqtRcteLba6LP9ly2gc9d4ZQ-vdWq-9_NOY9hV6pS3lOTIfX9uCmMjqElPxwJdzkmtbD7bXzLh_NIiwmdXFlAmjdoTZXZFLIzJoNlZ8fPBLugGFE4kNVnnq3sAiEoOvWzce_PG_2V6zLqdMDNmOg6KqGpDuGvbI61W4eDpK5Pf6CJnkq643HXoq4BC8EaPu5Jv1sUfyNgcRyYKKZGoFjTusoMS-vM3pf_En0tHvBuL84oHQtzZ6BLqPjSzmrQGSVPjRJCiVtm2Hkw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nomeLogin\": \"Nome de login\",\r\n    \"senha\": \"1234\",\r\n    \"nomePapel\": \"papel do usuário (admin/ pedagogico/ recruiter/ professor/ aluno)\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/cadastro",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"cadastro"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Docente",
+			"item": [
+				{
+					"name": "docente",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzaXN0ZW1hLWVzY29sYXIiLCJzdWIiOiIxIiwiZXhwIjoxNzEzNjU5OTY3LCJpYXQiOjE3MTM2MjM5NjcsInNjb3BlIjoiYWRtaW4ifQ.SgsuUxV9LMZRIZgotuIsKb1tfTyilT_ljksbhp_oP85t2WyGVdBYWQ5Ja70aBh9xd6LVcsuIafNEZxiXYysa5aToGvUiC7C3DSbyhrESfn_emOfRR71jaDdmTlJsYUQNLtTQzFMpUEl0CnOSd_rKuFgg_ipWsPfrNPEYuJiXvb7OupD_QcL35Sg8yVhzocWrpU6Y-SssKuBN0z8rTTZ_HCjSp127xJUNsi6_Co8Ank9l4W7mUww4cybmFkdD_r7IWlGyxHCLjyHIvBXvy20tMyt8i3h4RRDb-8vc7iTxoBQwlxB0KS8NBmufOuafw_Tj25W2VnNzCbcvoGyt_69bXA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/docentes",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"docentes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "docente/:id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzaXN0ZW1hLWVzY29sYXIiLCJzdWIiOiIyIiwiZXhwIjoxNzEzNjYwMDM1LCJpYXQiOjE3MTM2MjQwMzUsInNjb3BlIjoicGVkYWdvZ2ljbyJ9.GlneFP66xlWF1HgT6D8S6VRtCqiAF_fgNHu6elq7BBTAFLHVRHaf8E_ZwInQr8TAiwEY0iaQEJOs-KPQxGtxccozbZpIsDpmOVwBqdK8vda45z3xthOSOEfexzdrVmxHqNv8E094Tx9j7mw6c70XZtNetH4b0q8RDIMI42Xa_8xblnQ65f6Er5VxiwqnGG_A3_W5A1db34cwyCmovIiIG3AEtOfZ3oYto83JNtjUhph5VMAhQWKr2GKkRwu1VHcH3dIm1e91qiR9RlIQKqtRV5KngWKy4xr6GM1yc3-S5O2jjRH0QA4GL-BH3dF-jJbKh2noBSPF4VhGd0G5YdmhmA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/docentes/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"docentes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "docente",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzaXN0ZW1hLWVzY29sYXIiLCJzdWIiOiIyIiwiZXhwIjoxNzEzNjU5ODkxLCJpYXQiOjE3MTM2MjM4OTEsInNjb3BlIjoicGVkYWdvZ2ljbyJ9.GWU2cRxmOyuUuAs292uMzPQdNF5p2ZlBwF6pfaWBMZPohdE5HeY77uIM_Nq-WgPtevMNUz7lrRkG_Bc0v-3e6HHQVQTh8lmvIK697mw52RzUcfQ7mPZEK8rwImHn2LLM6SeNgV6xI3maSbZuuqwLXic1u0AS0ERdhJRo8Vqfv7lnQwEok1GmXzf1Z8BgxuS093f3jeudpfSlZd23oSNOn9e_BJGxDIf2_2kag5ao-kUamsbElG0W9O7AzJZ_w5T54eO-VvFKewL8l5Ateacs1JSj4UKTLGE11TAyhoh3iiMZEJ6nLnN5RDOdV97XebWnbps4v8vT2iwczRpJk1b5qg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Nome do docente\",\r\n    \"usuario\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/docentes",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"docentes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "docente/:id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzaXN0ZW1hLWVzY29sYXIiLCJzdWIiOiIyIiwiZXhwIjoxNzEzNjYwMDM1LCJpYXQiOjE3MTM2MjQwMzUsInNjb3BlIjoicGVkYWdvZ2ljbyJ9.GlneFP66xlWF1HgT6D8S6VRtCqiAF_fgNHu6elq7BBTAFLHVRHaf8E_ZwInQr8TAiwEY0iaQEJOs-KPQxGtxccozbZpIsDpmOVwBqdK8vda45z3xthOSOEfexzdrVmxHqNv8E094Tx9j7mw6c70XZtNetH4b0q8RDIMI42Xa_8xblnQ65f6Er5VxiwqnGG_A3_W5A1db34cwyCmovIiIG3AEtOfZ3oYto83JNtjUhph5VMAhQWKr2GKkRwu1VHcH3dIm1e91qiR9RlIQKqtRV5KngWKy4xr6GM1yc3-S5O2jjRH0QA4GL-BH3dF-jJbKh2noBSPF4VhGd0G5YdmhmA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Nome do docente atualizado\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/docentes/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"docentes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "docente/:id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzaXN0ZW1hLWVzY29sYXIiLCJzdWIiOiIxIiwiZXhwIjoxNzEzNjYwNjUxLCJpYXQiOjE3MTM2MjQ2NTEsInNjb3BlIjoiYWRtaW4ifQ.N5sqKfjfJVwjaoeZK_EMPCa6ZqSjhZlk-mKaWaR6M8K43FNk50QbZIaNN37WDaGdvCy1RNwRFqtQ0-3W8nDRkGWrr0kmutfuOLlt9F3BeEUFzjKNthRS6LRwkPvJPocqYryVZvgI4SpkUvJiqKwq2IU9oUtCLIx7Th8NEASCVQM8QwjqLmNM0kiY_XAABY2RUxA-sNc6Y20_JNe8vah982oiHp9wQ34WPJ8e3dwsJQuYoG0GmlpGZPnpi3lOISL74qv3I_d_dDZXE7rIxfQ8YSgGlZrRAKoenw5ozu5pthNyUyy9BPFuazoxitQP-Kv82Ev_zX5ErDhHTfjqmNOkcw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/docentes/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"docentes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Curso",
+			"item": [
+				{
+					"name": "curso",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzaXN0ZW1hLWVzY29sYXIiLCJzdWIiOiIxIiwiZXhwIjoxNzEzNjYwODgzLCJpYXQiOjE3MTM2MjQ4ODMsInNjb3BlIjoiYWRtaW4ifQ.QGBXgX1hBni3IiwMc_Xdk_Q31HjDALygf236B_-9hgxA5ZY5LfCUSpL3q0dvJKpWl8E7f719BXtql1WtvWjdhrKuylMWCdXLbPrkVm3dxq3iYbt4aSj6Omwp9zTnRqSne1ek5PL96noNU7igDoMKlKePHPBXV-1EYoU39NrWJtl1QWkufAbfk70_THYiDy-zkOIJaP-a3Z3jnraBnSwefrH5gqgtQBv1JDDTIPa1SO7bwk_4KhtpwqdBHpxyQcz5xgdD4Q1eS3TcEW7hiD20l1LE1qB3IDuHIruOZxomff4PFhStDy2-hrrQtnzLISmItMZ9OmpkE1_JGdEDeVr9zw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/cursos",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"cursos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "curso/:id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzaXN0ZW1hLWVzY29sYXIiLCJzdWIiOiIxIiwiZXhwIjoxNzEzNjYwODgzLCJpYXQiOjE3MTM2MjQ4ODMsInNjb3BlIjoiYWRtaW4ifQ.QGBXgX1hBni3IiwMc_Xdk_Q31HjDALygf236B_-9hgxA5ZY5LfCUSpL3q0dvJKpWl8E7f719BXtql1WtvWjdhrKuylMWCdXLbPrkVm3dxq3iYbt4aSj6Omwp9zTnRqSne1ek5PL96noNU7igDoMKlKePHPBXV-1EYoU39NrWJtl1QWkufAbfk70_THYiDy-zkOIJaP-a3Z3jnraBnSwefrH5gqgtQBv1JDDTIPa1SO7bwk_4KhtpwqdBHpxyQcz5xgdD4Q1eS3TcEW7hiD20l1LE1qB3IDuHIruOZxomff4PFhStDy2-hrrQtnzLISmItMZ9OmpkE1_JGdEDeVr9zw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/cursos/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"cursos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "curso",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzaXN0ZW1hLWVzY29sYXIiLCJzdWIiOiIyIiwiZXhwIjoxNzEzNjYwOTMwLCJpYXQiOjE3MTM2MjQ5MzAsInNjb3BlIjoicGVkYWdvZ2ljbyJ9.VVinYYMi87D3Bao9sEJMDGKap_xeIoPfnsBg29R5kqe5LDPSDnWDB9qL7zy7pDtSHUJkAAdKYEgUlDIhc3GdX2g_u1sFysjy43tuDlZgRdIHl6-7O2oEC6DZ4HSdO80XPXcOU83dnsMa_v7R6MrUw56HfL2ZDVvjN0YYgJrfkpLwmOv2aq_SP0zbqidAbO_m3pl1ZMfbnvasn53m_yBYskAkH7M5fZ3MEpFzXcdfLI_wFdkYRDSzBLWgHuWWSFMl1aFpEFkCFPQ3_MQ1xO7P4VaDuPW1S0vCk42UtKfixYsRgrtbom38zMAEte5vaNZ-WVnY1kHmxg5FgT_5BgauqQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Nome do curso\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/cursos",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"cursos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "curso/:id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzaXN0ZW1hLWVzY29sYXIiLCJzdWIiOiIyIiwiZXhwIjoxNzEzNjYxMDEwLCJpYXQiOjE3MTM2MjUwMTAsInNjb3BlIjoicGVkYWdvZ2ljbyJ9.eG7pk1aD2cCYYYyjVf7Kiy5z5T0lt55ehlJHjyaocZ3tm8oBRQrD1ho92KZVgU_epi1RuY4IsYV4DA_2FOJnhOJ9vMFNdVT0qRKhyTnPoGiqdqh8JEGVslOrPiqwQMIHgnq6Mp5fepZV2Uq_ePx64XtzYRXgDz0oYL51HpnsLMEXEH4MxNNBNvH0d0oMszlUHQjCB7UMETikWXc4PPSKnofLPFo37vdRDH9vV4hMESGMA7XEgSzt3KU8pglrWOt6lBUswWXtUg0RgHNx2m8JLUaeel2ikRz1lycBcFQ1RAld5m1dUm8cjTyKHjt0Ze1YwqHqUdMDcwc3gfrxeKYRpw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Nome do curso atualizado\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/cursos/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"cursos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "curso/:id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzaXN0ZW1hLWVzY29sYXIiLCJzdWIiOiIxIiwiZXhwIjoxNzEzNjYxMDM4LCJpYXQiOjE3MTM2MjUwMzgsInNjb3BlIjoiYWRtaW4ifQ.eIRzHInjRGr4V1_SqySlVfKOK45edN6jSkBu2kX-MmNYh59Sg4KAo2QEd4Yv-5uiqcPgjAPmf7sY9spUNpQBCt_dEt9wR0ANGp3y5fybUcHqOM48mVflmfTcAIQyA3PfySQhEoovA289670m5XNU1MQ0X4wl4Opqk-56nNQalCnqNQpFX5YJo9S6rJnMQo5D5UB4SBZKonYMKwYqte56NCuM619aZNx6UEp6misFaj_1VXyXAB-m5FkejYvlExad8nnroXW5KEDVqSlOcpaIXJB66PllB2aIwiVX4tHdA2GjgwWzTJeTz7hNtKqUMv4DWM09OougYO1mUDoXlmKr_Q",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/cursos/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"cursos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Materia",
+			"item": [
+				{
+					"name": "materia",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzaXN0ZW1hLWVzY29sYXIiLCJzdWIiOiIxIiwiZXhwIjoxNzEzNjYxMDM4LCJpYXQiOjE3MTM2MjUwMzgsInNjb3BlIjoiYWRtaW4ifQ.eIRzHInjRGr4V1_SqySlVfKOK45edN6jSkBu2kX-MmNYh59Sg4KAo2QEd4Yv-5uiqcPgjAPmf7sY9spUNpQBCt_dEt9wR0ANGp3y5fybUcHqOM48mVflmfTcAIQyA3PfySQhEoovA289670m5XNU1MQ0X4wl4Opqk-56nNQalCnqNQpFX5YJo9S6rJnMQo5D5UB4SBZKonYMKwYqte56NCuM619aZNx6UEp6misFaj_1VXyXAB-m5FkejYvlExad8nnroXW5KEDVqSlOcpaIXJB66PllB2aIwiVX4tHdA2GjgwWzTJeTz7hNtKqUMv4DWM09OougYO1mUDoXlmKr_Q",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/materias",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"materias"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "materia/:id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzaXN0ZW1hLWVzY29sYXIiLCJzdWIiOiIxIiwiZXhwIjoxNzEzNjYxMDM4LCJpYXQiOjE3MTM2MjUwMzgsInNjb3BlIjoiYWRtaW4ifQ.eIRzHInjRGr4V1_SqySlVfKOK45edN6jSkBu2kX-MmNYh59Sg4KAo2QEd4Yv-5uiqcPgjAPmf7sY9spUNpQBCt_dEt9wR0ANGp3y5fybUcHqOM48mVflmfTcAIQyA3PfySQhEoovA289670m5XNU1MQ0X4wl4Opqk-56nNQalCnqNQpFX5YJo9S6rJnMQo5D5UB4SBZKonYMKwYqte56NCuM619aZNx6UEp6misFaj_1VXyXAB-m5FkejYvlExad8nnroXW5KEDVqSlOcpaIXJB66PllB2aIwiVX4tHdA2GjgwWzTJeTz7hNtKqUMv4DWM09OougYO1mUDoXlmKr_Q",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/materias/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"materias",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "materia/cursos/:curso_id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzaXN0ZW1hLWVzY29sYXIiLCJzdWIiOiIxIiwiZXhwIjoxNzEzNjYxMDM4LCJpYXQiOjE3MTM2MjUwMzgsInNjb3BlIjoiYWRtaW4ifQ.eIRzHInjRGr4V1_SqySlVfKOK45edN6jSkBu2kX-MmNYh59Sg4KAo2QEd4Yv-5uiqcPgjAPmf7sY9spUNpQBCt_dEt9wR0ANGp3y5fybUcHqOM48mVflmfTcAIQyA3PfySQhEoovA289670m5XNU1MQ0X4wl4Opqk-56nNQalCnqNQpFX5YJo9S6rJnMQo5D5UB4SBZKonYMKwYqte56NCuM619aZNx6UEp6misFaj_1VXyXAB-m5FkejYvlExad8nnroXW5KEDVqSlOcpaIXJB66PllB2aIwiVX4tHdA2GjgwWzTJeTz7hNtKqUMv4DWM09OougYO1mUDoXlmKr_Q",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/materias/cursos/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"materias",
+								"cursos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "materia",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzaXN0ZW1hLWVzY29sYXIiLCJzdWIiOiIyIiwiZXhwIjoxNzEzNjYxNDAwLCJpYXQiOjE3MTM2MjU0MDAsInNjb3BlIjoicGVkYWdvZ2ljbyJ9.ZG7Qv2dxnuZHSP1pbBChHunzUNVw6LHhZlbWsA9wmwzL2bBU1OfzbrKqiYkgFFvtF2yvRR1x6ZCZJTRdHianfNXx2TtHLHuPkcei4DcL57gI_MeYTwR7fhQ-UYEQbavH2_of_uZt7zqLvm-GlzhAXCPBtdl0xTRz2pLZkvUnZetjpF_a6G8eSzaatLF4gL_vKMKj0LWUIhtRrai0idUxXSRFWguBRdOdRmMvxQTtXV6ScMD9VH0ibK0PjdbCxvD4qZLaYsL-kE6jSGHNG3_sWZim8QJHUEuOE6Ck3i6qIpEZ4-4S5NM5qcGu7tIcjKGoo5vA2C32LjdzuBCE7SvdNw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Nome da matéria\",\r\n    \"curso\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/materias",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"materias"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "materia/:id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzaXN0ZW1hLWVzY29sYXIiLCJzdWIiOiIyIiwiZXhwIjoxNzEzNjYxNDAwLCJpYXQiOjE3MTM2MjU0MDAsInNjb3BlIjoicGVkYWdvZ2ljbyJ9.ZG7Qv2dxnuZHSP1pbBChHunzUNVw6LHhZlbWsA9wmwzL2bBU1OfzbrKqiYkgFFvtF2yvRR1x6ZCZJTRdHianfNXx2TtHLHuPkcei4DcL57gI_MeYTwR7fhQ-UYEQbavH2_of_uZt7zqLvm-GlzhAXCPBtdl0xTRz2pLZkvUnZetjpF_a6G8eSzaatLF4gL_vKMKj0LWUIhtRrai0idUxXSRFWguBRdOdRmMvxQTtXV6ScMD9VH0ibK0PjdbCxvD4qZLaYsL-kE6jSGHNG3_sWZim8QJHUEuOE6Ck3i6qIpEZ4-4S5NM5qcGu7tIcjKGoo5vA2C32LjdzuBCE7SvdNw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Nome da matéria atualizado\",\r\n    \"curso\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/materias/3",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"materias",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "materia/:id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzaXN0ZW1hLWVzY29sYXIiLCJzdWIiOiIxIiwiZXhwIjoxNzEzNjYxNTU0LCJpYXQiOjE3MTM2MjU1NTQsInNjb3BlIjoiYWRtaW4ifQ.sAAwjadtF4PNlo5Ct3tI2ILPObZj_O1nuCrohYj-Ve4o7LGvtG3O_sG5q5TOnMNUxckJbqy7-M2tiYclp1OK3alBI45mYKIDnvlt7QXF4GZOoV8KGLBnD9PmvlZowwrWn2sKOkQo0g6FpWF5n_udktYX3ULtSQOyn-6vgPxsf2d0B6JtcRWsUej7ZuthLiQRZurSE31Zz_NHgZH7xd4Z8yWCrNc43KETPGSlSFBW2hObhQtL5omgQD-7oP7SD2GiAquz09iombLrWHuAioWCQ9Gh11OT4-msrlzdYrN6OLn02-2jUyAiENdA74VUZQgmJAOCMZ1ZEUIf2xfQwtKqMQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/materias/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"materias",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Turma",
+			"item": [
+				{
+					"name": "turma",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzaXN0ZW1hLWVzY29sYXIiLCJzdWIiOiIyIiwiZXhwIjoxNzEzNjYxNjU5LCJpYXQiOjE3MTM2MjU2NTksInNjb3BlIjoicGVkYWdvZ2ljbyJ9.Bp1BqU5lIg7lbWqBgGVZnGmw4UhzecwsJCQI-FCXStAQDZD0s8oK9oOBy6NGCAGqASP3LaXomlmjb7ia2bpsRwkZ-5w9MVX1SRmoaWaPmAfJw9ZREOtCLA9-BDuF-PrqTZ3viQWse2Epkz0oJ9ZP30YSlrZ-dY4M8b37ea2vi16J07tFtYGzpsSQMae1QsGi-3hx-yvOXOhXfo4wLSMr19AyG_tGYSTwOi5H5yioJmg3qmJjidTIIJo9fE9jZAagCjSovuG08CGXQdE6gsCaTbGQy2fxW0QWYqakoftXXLeT-kkIQLLmWAnYVEcEoIvHFFFHd-kwAuncZH0E-osIyg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/turmas",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"turmas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "turma/:id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzaXN0ZW1hLWVzY29sYXIiLCJzdWIiOiIyIiwiZXhwIjoxNzEzNjYxNjU5LCJpYXQiOjE3MTM2MjU2NTksInNjb3BlIjoicGVkYWdvZ2ljbyJ9.Bp1BqU5lIg7lbWqBgGVZnGmw4UhzecwsJCQI-FCXStAQDZD0s8oK9oOBy6NGCAGqASP3LaXomlmjb7ia2bpsRwkZ-5w9MVX1SRmoaWaPmAfJw9ZREOtCLA9-BDuF-PrqTZ3viQWse2Epkz0oJ9ZP30YSlrZ-dY4M8b37ea2vi16J07tFtYGzpsSQMae1QsGi-3hx-yvOXOhXfo4wLSMr19AyG_tGYSTwOi5H5yioJmg3qmJjidTIIJo9fE9jZAagCjSovuG08CGXQdE6gsCaTbGQy2fxW0QWYqakoftXXLeT-kkIQLLmWAnYVEcEoIvHFFFHd-kwAuncZH0E-osIyg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/turmas/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"turmas",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "turma",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzaXN0ZW1hLWVzY29sYXIiLCJzdWIiOiIyIiwiZXhwIjoxNzEzNjYxNjU5LCJpYXQiOjE3MTM2MjU2NTksInNjb3BlIjoicGVkYWdvZ2ljbyJ9.Bp1BqU5lIg7lbWqBgGVZnGmw4UhzecwsJCQI-FCXStAQDZD0s8oK9oOBy6NGCAGqASP3LaXomlmjb7ia2bpsRwkZ-5w9MVX1SRmoaWaPmAfJw9ZREOtCLA9-BDuF-PrqTZ3viQWse2Epkz0oJ9ZP30YSlrZ-dY4M8b37ea2vi16J07tFtYGzpsSQMae1QsGi-3hx-yvOXOhXfo4wLSMr19AyG_tGYSTwOi5H5yioJmg3qmJjidTIIJo9fE9jZAagCjSovuG08CGXQdE6gsCaTbGQy2fxW0QWYqakoftXXLeT-kkIQLLmWAnYVEcEoIvHFFFHd-kwAuncZH0E-osIyg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Nome da turma\",\r\n    \"docente\": 1,\r\n    \"curso\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/turmas",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"turmas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "turma/:id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzaXN0ZW1hLWVzY29sYXIiLCJzdWIiOiIxIiwiZXhwIjoxNzEzNjYxNzE3LCJpYXQiOjE3MTM2MjU3MTcsInNjb3BlIjoiYWRtaW4ifQ.VTRRmLutblQEZnQE_AFUeoK2-f1y_58kfjEJBdNirOcUAuJxvL-ttzEt08OYQJzmvjaPMUSdIUqlyhW-susqlcCfxXItOZgQCNE_Wuc8qzeiB-fDi38BG7BKTZc_jrYzgG0zEqt-3GHNeW7hdxUp4jv6R4OOWXAfCD9BDyf4eG8CNzB8qFJ0_LwA3EZtrsNotLcw-SNZSIZHkMvFIzg1c7PT85u8aRbkoW0JqcwaKnSaiVF-wmg7Z5wf0dXQOB7W9H8thEblRwQKcNk3LPeHf6WvB75JaYw_PlC_orc4InNeUZa22wm1_oXjKaNt3wdWpSlae8iQKqwBNDsSEBJdUw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Nome da turma atualizado\",\r\n    \"docente\": 1,\r\n    \"curso\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/turmas/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"turmas",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "turma/:id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzaXN0ZW1hLWVzY29sYXIiLCJzdWIiOiIxIiwiZXhwIjoxNzEzNjYxNzE3LCJpYXQiOjE3MTM2MjU3MTcsInNjb3BlIjoiYWRtaW4ifQ.VTRRmLutblQEZnQE_AFUeoK2-f1y_58kfjEJBdNirOcUAuJxvL-ttzEt08OYQJzmvjaPMUSdIUqlyhW-susqlcCfxXItOZgQCNE_Wuc8qzeiB-fDi38BG7BKTZc_jrYzgG0zEqt-3GHNeW7hdxUp4jv6R4OOWXAfCD9BDyf4eG8CNzB8qFJ0_LwA3EZtrsNotLcw-SNZSIZHkMvFIzg1c7PT85u8aRbkoW0JqcwaKnSaiVF-wmg7Z5wf0dXQOB7W9H8thEblRwQKcNk3LPeHf6WvB75JaYw_PlC_orc4InNeUZa22wm1_oXjKaNt3wdWpSlae8iQKqwBNDsSEBJdUw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/turmas/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"turmas",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Aluno",
+			"item": [
+				{
+					"name": "aluno",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzaXN0ZW1hLWVzY29sYXIiLCJzdWIiOiIyIiwiZXhwIjoxNzEzNjYxOTQwLCJpYXQiOjE3MTM2MjU5NDAsInNjb3BlIjoicGVkYWdvZ2ljbyJ9.QzpeZOd9KpIsXUKCk9ogxoL_eIBBqi4PC-TFokhXAKdg4gju67vcVxdACWGl8ecfGNqeI0UsWnQy3U1diBeb2WOhV8ogJDoRyK5oBD3gbTaOZNypErWQ6CFwtBN6IgMBRj-_w_sGcF-IApeReCebrYBVATe6htos44-w3ehFcspjElO83k2ARM441W04SUmC_qLuq-t3Ha7XiFy7d_VloNCagIeUbb4exsFjdiOH9EqdaYjy4mu2slCq36nDYFw-xwwD5EXV5EyWpPY5oFmd_UX0_G0SheNw7NMtH--5TN_sPlkeTjddYcKYOMathr76HpVY2SUeu7qH1sBeLTOCWg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/alunos",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"alunos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "aluno/:id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzaXN0ZW1hLWVzY29sYXIiLCJzdWIiOiIyIiwiZXhwIjoxNzEzNjYxOTQwLCJpYXQiOjE3MTM2MjU5NDAsInNjb3BlIjoicGVkYWdvZ2ljbyJ9.QzpeZOd9KpIsXUKCk9ogxoL_eIBBqi4PC-TFokhXAKdg4gju67vcVxdACWGl8ecfGNqeI0UsWnQy3U1diBeb2WOhV8ogJDoRyK5oBD3gbTaOZNypErWQ6CFwtBN6IgMBRj-_w_sGcF-IApeReCebrYBVATe6htos44-w3ehFcspjElO83k2ARM441W04SUmC_qLuq-t3Ha7XiFy7d_VloNCagIeUbb4exsFjdiOH9EqdaYjy4mu2slCq36nDYFw-xwwD5EXV5EyWpPY5oFmd_UX0_G0SheNw7NMtH--5TN_sPlkeTjddYcKYOMathr76HpVY2SUeu7qH1sBeLTOCWg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/alunos/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"alunos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "aluno",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzaXN0ZW1hLWVzY29sYXIiLCJzdWIiOiIyIiwiZXhwIjoxNzEzNjYxOTQwLCJpYXQiOjE3MTM2MjU5NDAsInNjb3BlIjoicGVkYWdvZ2ljbyJ9.QzpeZOd9KpIsXUKCk9ogxoL_eIBBqi4PC-TFokhXAKdg4gju67vcVxdACWGl8ecfGNqeI0UsWnQy3U1diBeb2WOhV8ogJDoRyK5oBD3gbTaOZNypErWQ6CFwtBN6IgMBRj-_w_sGcF-IApeReCebrYBVATe6htos44-w3ehFcspjElO83k2ARM441W04SUmC_qLuq-t3Ha7XiFy7d_VloNCagIeUbb4exsFjdiOH9EqdaYjy4mu2slCq36nDYFw-xwwD5EXV5EyWpPY5oFmd_UX0_G0SheNw7NMtH--5TN_sPlkeTjddYcKYOMathr76HpVY2SUeu7qH1sBeLTOCWg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Nome do aluno\",\r\n    \"dataNascimento\": \"dia/mês/ano ex (30/04/1996)\",\r\n    \"usuario\": 1,\r\n    \"turma\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/alunos",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"alunos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "aluno/:id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzaXN0ZW1hLWVzY29sYXIiLCJzdWIiOiIyIiwiZXhwIjoxNzEzNjYxOTQwLCJpYXQiOjE3MTM2MjU5NDAsInNjb3BlIjoicGVkYWdvZ2ljbyJ9.QzpeZOd9KpIsXUKCk9ogxoL_eIBBqi4PC-TFokhXAKdg4gju67vcVxdACWGl8ecfGNqeI0UsWnQy3U1diBeb2WOhV8ogJDoRyK5oBD3gbTaOZNypErWQ6CFwtBN6IgMBRj-_w_sGcF-IApeReCebrYBVATe6htos44-w3ehFcspjElO83k2ARM441W04SUmC_qLuq-t3Ha7XiFy7d_VloNCagIeUbb4exsFjdiOH9EqdaYjy4mu2slCq36nDYFw-xwwD5EXV5EyWpPY5oFmd_UX0_G0SheNw7NMtH--5TN_sPlkeTjddYcKYOMathr76HpVY2SUeu7qH1sBeLTOCWg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Nome do aluno atualizado\",\r\n    \"dataNascimento\": \"dia/mês/ano ex (30/04/1996)\",\r\n    \"turma\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/alunos/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"alunos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "aluno/:id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzaXN0ZW1hLWVzY29sYXIiLCJzdWIiOiIxIiwiZXhwIjoxNzEzODMyNTY3LCJpYXQiOjE3MTM3OTY1NjcsInNjb3BlIjoiYWRtaW4ifQ.22CeQwwlxlONAQKTP2oxL5I-eqqp2KhyIXe6j0ngyI3x0BrPVszUS5xUexJJ-kuiRYY0G5oj5sADh_NaV9YObHX7dSEIo_0nYve6glUe8reaov6i6kSNEURhS9lUUXKUcdaB7oBJthMY37QnxVCN3nvFmYOmcXtkfGkWKyAjUoPak1D4REerjLvLTdrXJYvcSnNlru7WRIRy4zqD-xHZLP5yz1S8tizI5ndrpa8UYayxjsOKWeWdLnmccpzHCkR2eGEpFHRqt40ivM3KIlup2xzPzSLoBX778F6sAiSNtY9mSAeZ3IeE_T-MzCIhAUpMsX7pvO-qtI4_-riH0dfBNw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/alunos/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"alunos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Nota",
+			"item": [
+				{
+					"name": "nota",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzaXN0ZW1hLWVzY29sYXIiLCJzdWIiOiIxIiwiZXhwIjoxNzEzNTg0OTMyLCJpYXQiOjE3MTM1NDg5MzIsInNjb3BlIjoiYWRtaW4ifQ.AZJjW_jYVaWF56NSsCO0wfyb74-9qfWVJFXp55s-JeWT6uYZIyLKnhZhM5Ltk2Jp07wsj9-FN1Um5bVBaFm9VbJ6wjEgAU1zfCXc_i-bwAf3FZ0eS9qgQlKbTQWBkw32Bsejq1gx4cFYD_6zogsOLP9pSgqB1PBz9yzr-hbY3cIZBu47EinPsUgRGAi3eQRzWxWG3JelDhXj54zFqiWuF723hHosRw3hy9Im_ygOh70VHcXf82jKDStVoFPIg9E8Bx5e28mXaFEePyJSB05TN1R85qQWeBd0KAPzFQye7UmFoPOgt8SeTc-urpVeTvgC6H1v9X-zb5ko2rEvqwO1pQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/notas",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"notas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "nota/:id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzaXN0ZW1hLWVzY29sYXIiLCJzdWIiOiIxIiwiZXhwIjoxNzEzNDg2NTMwLCJpYXQiOjE3MTM0NTA1MzAsInNjb3BlIjoiYWRtaW4ifQ.vBs0h2Wd6nsZ_9oddtRo925dwG19rT47sFZIFRFnp9FDfZVYXYR4jgdBnEsk-w1WSnfnPN2uoDEiAs1owtFK8Dx9DdkBh0-vmO2REdMLSU32WM3g8dcLRonY6UTFNSzyd-MqyQEwLUWjl1CbAzOzijFUFBCyS-k_hzKZtPNIVHqP6RikBhoMUeUWoNQv_33TAHYQ7JWQ77fCJJLyvww8ult-I8Bc4Q4hTXSgmildW0AhNqiGci7cZZ_yVqco6EBaISQ3y7L-b7bq7nE-nqZHXD7QgQdGE-dXQNCyqswR3eqPtLCE75IX9IiSTqZkRpWwikg7Y7cpa75gqih9-uibWQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/notas/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"notas",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "nota/docentes/:docente_id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzaXN0ZW1hLWVzY29sYXIiLCJzdWIiOiIxIiwiZXhwIjoxNzEzNTg2OTY5LCJpYXQiOjE3MTM1NTA5NjksInNjb3BlIjoiYWRtaW4ifQ.De1Gt0p0gshJYg9xIe6JePXsLhOA2nBptxQudkVoIRhv0G44dJYmJcM9YyvMB2zh8IWiSFRXNeOfQjB3t3ahRAHawgXGh6aRk0dW_KbTlqFhUkNh7DTfbpmLjETea7kr7x0Q8e5-37amPpx_0Q8Csk-JZkNNh19f5_4_PPJW9bxXfPtrGHluy_poDLltEucNuayYVvKK6I7D8lADU3-LozdHr6yuhTLlWriFnHH77ZO7nmmGczPQ-ZDfb5Tvp5PP5t8lVpYB69BEu7TJqifHiZ2yzUIZ6E2fnsVs47acT3x9lXiGALRigvMC5K8fPrVaRzW92jKaxtXvShB0KTdSSQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/notas/docentes/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"notas",
+								"docentes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "nota/alunos/:aluno_id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzaXN0ZW1hLWVzY29sYXIiLCJzdWIiOiIxNyIsImV4cCI6MTcxMzU4NzU1OSwiaWF0IjoxNzEzNTUxNTU5LCJzY29wZSI6ImFsdW5vIn0.j3fas758fLKccVoLlzmYaSWm0LtBZzpka9t3tFel2SXGraAIbIdaiC1LB3IcRcFFKjOjxTr_dqK1Y1ySER00ngjJCfrtd624PGuS86U2sJDkJqpf0vkllncr9N5xMnR5Wdb_8E_u0HzNmw47vFEDojvPrZDHdJ_oXCyJkGo1IJkqIlqRUGLvuVsrtLNeHEXCfuvTylEc9Hc4MPLfO1kFuHda2YBv1VWPQGzgkmFllk3rwX8LRv6dZfrgBvu0MAbqKU35wR9kYYukXyHb-wTmDRKkyW8QQsaT3tM234e827nB2aMhSRCEDAlOi2Y9LHRT_12sfDlhN8AF_5lNXWM6Xg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/notas/alunos/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"notas",
+								"alunos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "nota/alunos/:aluno_id/pontuacao",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzaXN0ZW1hLWVzY29sYXIiLCJzdWIiOiIxNyIsImV4cCI6MTcxMzU4OTA5OSwiaWF0IjoxNzEzNTUzMDk5LCJzY29wZSI6ImFsdW5vIn0.R9-0nf0tvyESK-JQs2Tr_KFY4BM3tpZOhgn3uBJlHaoJYAyFo_oLJlgTkrb9DC1TO5fJre0yhTfou_7HA9zWOBCC5uKlzE_WYlM6H6Z3npU6_glkfEi9x2qiCc7Uk0Helsf5AWASg4h0qzfc2UVenpZIg7M2t5AR85HKPpRwFkQSJGnX7c7y78n_P0i7-6Cdhp_q0wOULCajQU-MUSntP3TKTFuuH7y2VB7K_-SjznUfE46HkQDfaJwZBWc60qG07Gy2W9_9_RXxgqqJ6UlpbgJYKwRGbEAeHDJaIu0TQGcwRJIl9NQKadGtdBCLoNp7VAdL_7iIbjfqUn0M9HNGzQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/notas/alunos/1/pontuacao",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"notas",
+								"alunos",
+								"1",
+								"pontuacao"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "nota",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzaXN0ZW1hLWVzY29sYXIiLCJzdWIiOiIxMyIsImV4cCI6MTcxMzU4MjY3MywiaWF0IjoxNzEzNTQ2NjczLCJzY29wZSI6InByb2Zlc3NvciJ9.ng7sXEV9pm5_Y7BZJ8DAz0YrgG3YQBrULS0eQTY2_Qu9RrVsLffW9xwyqpmsbzPOJ4t98_IaUa2OQ4h9Z28HGnX4jTe--ptQzZRQEsATeCIFkCDkh0IWiup9tREJWj_D9E2g4TQde_PulWxQcYKD2ZVxVGwme3UIdRhhtlkm1IkUF72wYcOMvBuP4Z51gEFL1zRPBtAF9x-NoFCqQAMx0Cs-C1jtfaW9iWWmgjiBgqZmQtQ9_ZOQg1tBStEtk3kMXyWTQSoWijMrneBZwxiQ-VnF5Z-a58idmZ6pJJ2TDZIEguNBrmREY4hXoTcx0CoYK0n1TeaddHPlIwayfaFALA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"aluno\": 1,\r\n    \"docente\": 1,\r\n    \"materia\": 1,\r\n    \"valor\": 10\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/notas",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"notas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "nota/:id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzaXN0ZW1hLWVzY29sYXIiLCJzdWIiOiIxIiwiZXhwIjoxNzEzNDg2NTMwLCJpYXQiOjE3MTM0NTA1MzAsInNjb3BlIjoiYWRtaW4ifQ.vBs0h2Wd6nsZ_9oddtRo925dwG19rT47sFZIFRFnp9FDfZVYXYR4jgdBnEsk-w1WSnfnPN2uoDEiAs1owtFK8Dx9DdkBh0-vmO2REdMLSU32WM3g8dcLRonY6UTFNSzyd-MqyQEwLUWjl1CbAzOzijFUFBCyS-k_hzKZtPNIVHqP6RikBhoMUeUWoNQv_33TAHYQ7JWQ77fCJJLyvww8ult-I8Bc4Q4hTXSgmildW0AhNqiGci7cZZ_yVqco6EBaISQ3y7L-b7bq7nE-nqZHXD7QgQdGE-dXQNCyqswR3eqPtLCE75IX9IiSTqZkRpWwikg7Y7cpa75gqih9-uibWQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"valor\": 10\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/notas/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"notas",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "nota/:id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzaXN0ZW1hLWVzY29sYXIiLCJzdWIiOiIxIiwiZXhwIjoxNzEzNTIyNjg1LCJpYXQiOjE3MTM0ODY2ODUsInNjb3BlIjoiYWRtaW4ifQ.komJaRNOE_aZLyXPUKqytEk-kU88KQwWtmYNyacFzxmWeqXlv1vfuznlUjyk1EhM8PXuZ4P_UofQnx9YLsK61sBerOBwM02MgxIaRRaB1KD1Wb6fppU58smH088OHwZrlKMUqUUuR83HyR769G7y2l8qGLpCUi3GwcWxORuUBEpx-9Rp7b8UnHA2L3T_v4CgDLMjEtHcsdW1cI0yZAuW8gmkuyJJRuKAI908xQiwmsVFRjEcrSHCj_CeFPFNPaiL3WkP0J6l0L50oEO_xYtfCMKHrhpTp2zR26eGzGBHtIMDFEqfKDH3hUk0buetnkT4AWgdJU97e8mMcC4a3gYl6g",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/notas/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"notas",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
