@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface TurmaRepository extends JpaRepository<TurmaEntity, Long> {
 
+    boolean existsByNome(String nome);
 }
