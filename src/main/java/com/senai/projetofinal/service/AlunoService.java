@@ -81,6 +81,11 @@ public class AlunoService {
             throw new IllegalArgumentException("Nome não pode ser nulo ou vazio");
         }
 
+        if (repository.existsByNome(inserirAlunoRequest.nome())) {
+            log.error("Um aluno já existe com o nome: {}", inserirAlunoRequest.nome());
+            throw new IllegalArgumentException("Um aluno já existe com o nome passado");
+        }
+
         UsuarioEntity newAlunoUsuario = usuarioRepository.findById(inserirAlunoRequest.usuario())
                 .orElseThrow(() -> {
                     log.error("Usuário não encontrado");
@@ -150,6 +155,11 @@ public class AlunoService {
         if (atualizarAlunoRequest.nome() == null || atualizarAlunoRequest.nome().isBlank()) {
             log.error("Nome não pode ser nulo ou vazio");
             throw new IllegalArgumentException("Nome não pode ser nulo ou vazio");
+        }
+
+        if (repository.existsByNome(atualizarAlunoRequest.nome())) {
+            log.error("Um aluno já existe com o nome: {}", atualizarAlunoRequest.nome());
+            throw new IllegalArgumentException("Um aluno já existe com o nome passado");
         }
 
         TurmaEntity turma = turmaRepository.findById(atualizarAlunoRequest.turma())
