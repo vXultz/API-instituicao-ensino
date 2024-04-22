@@ -44,7 +44,7 @@ public class AlunoController {
         try {
             AlunoResponse criarAlunoResponse = service.salvar(inserirAlunoRequest, token.substring(7));
             return new ResponseEntity<>(criarAlunoResponse, HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }

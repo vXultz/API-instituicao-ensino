@@ -38,12 +38,14 @@ public class AlunoService {
         String role = tokenService.buscaCampo(token, "scope");
 
         if (!"admin".equals(role) && !"pedagogico".equals(role)) {
+            log.error("Usuário não autorizado: {}", role);
             throw new SecurityException("Usuário não autorizado");
         }
 
         List<AlunoEntity> alunos = repository.findAll();
 
         if (alunos.isEmpty()) {
+            log.info("Nenhum aluno encontrado");
             throw new NotFoundException("Nenhum aluno encontrado");
         }
 
@@ -55,35 +57,48 @@ public class AlunoService {
         String role = tokenService.buscaCampo(token, "scope");
 
         if (!"admin".equals(role) && !"pedagogico".equals(role)) {
+            log.error("Usuário não autorizado: {}", role);
             throw new SecurityException("Usuário não autorizado");
         }
 
         log.info("Aluno com id {} encontrado", id);
-        return repository.findById(id).orElseThrow(() -> new NotFoundException("Aluno não encontrado"));
+        return repository.findById(id).orElseThrow(() -> {
+            log.error("Aluno não encontrado");
+            return new NotFoundException("Aluno não encontrado");
+        });
     }
 
     public AlunoResponse salvar(InserirAlunoRequest inserirAlunoRequest, String token) {
         String role = tokenService.buscaCampo(token, "scope");
 
         if (!"admin".equals(role) && !"pedagogico".equals(role)) {
+            log.error("Usuário não autorizado: {}", role);
             throw new SecurityException("Usuário não autorizado");
         }
 
         if (inserirAlunoRequest.nome() == null || inserirAlunoRequest.nome().isBlank()) {
+            log.error("Nome não pode ser nulo ou vazio");
             throw new IllegalArgumentException("Nome não pode ser nulo ou vazio");
         }
 
         UsuarioEntity newAlunoUsuario = usuarioRepository.findById(inserirAlunoRequest.usuario())
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+                .orElseThrow(() -> {
+                    log.error("Usuário não encontrado");
+                    return new RuntimeException("Usuário não encontrado");
+                });
 
         String newAlunoPapel = newAlunoUsuario.getPapel().getNome().toString();
 
         if (!"aluno".equals(newAlunoPapel)) {
+            log.error("Apenas um usuário com papel de aluno pode ser salvo como um aluno");
             throw new IllegalArgumentException("Apenas um usuário com papel de aluno pode ser salvo como um aluno");
         }
 
         TurmaEntity turma = turmaRepository.findById(inserirAlunoRequest.turma())
-                .orElseThrow(() -> new NotFoundException("Turma não encontrada"));
+                .orElseThrow(() -> {
+                    log.error("Turma não encontrada");
+                    return new NotFoundException("Turma não encontrada");
+                });
 
         AlunoEntity aluno = new AlunoEntity();
         UsuarioEntity user = new UsuarioEntity();
@@ -109,10 +124,12 @@ public class AlunoService {
         String role = tokenService.buscaCampo(token, "scope");
 
         if (!"admin".equals(role)) {
+            log.error("Apenas um admin pode remover um aluno");
             throw new SecurityException("Apenas um admin pode remover um aluno");
         }
 
         if (!repository.existsById(id)) {
+            log.error("Nenhum aluno encontrado com o id passado");
             throw new NotFoundException("Nenhum aluno encontrado com o id passado");
         }
 
@@ -124,17 +141,22 @@ public class AlunoService {
         String role = tokenService.buscaCampo(token, "scope");
 
         if (!"admin".equals(role) && !"pedagogico".equals(role)) {
+            log.error("Usuário não autorizado: {}", role);
             throw new SecurityException("Usuário não autorizado");
         }
 
         AlunoEntity entity = buscarPorId(id, token);
 
         if (atualizarAlunoRequest.nome() == null || atualizarAlunoRequest.nome().isBlank()) {
+            log.error("Nome não pode ser nulo ou vazio");
             throw new IllegalArgumentException("Nome não pode ser nulo ou vazio");
         }
 
         TurmaEntity turma = turmaRepository.findById(atualizarAlunoRequest.turma())
-                .orElseThrow(() -> new NotFoundException("Turma não encontrada"));
+                .orElseThrow(() -> {
+                    log.error("Turma não encontrada");
+                    return new NotFoundException("Turma não encontrada");
+                });
 
         log.info("Atualizando aluno com o id {}", id);
         entity.setNome(atualizarAlunoRequest.nome());
