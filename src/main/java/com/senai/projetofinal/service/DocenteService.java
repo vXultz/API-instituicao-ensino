@@ -35,6 +35,7 @@ public class DocenteService {
         String role = tokenService.buscaCampo(token, "scope");
 
         if (!"admin".equals(role) && !"pedagogico".equals(role) && !"recruiter".equals(role)) {
+            log.error("Usuário não autorizado: {}", role);
             throw new SecurityException("Usuário não autorizado");
         }
 
@@ -44,6 +45,7 @@ public class DocenteService {
             log.info("Todos os professores listados");
             docentes = repository.findByUsuario_Papel_Nome(PapelEnum.PROFESSOR);
             if (docentes.isEmpty()) {
+                log.info("Não há professores cadastrados");
                 throw new NotFoundException("Não há professores cadastrados");
             }
         } else {
@@ -52,6 +54,7 @@ public class DocenteService {
         }
 
         if (docentes.isEmpty()) {
+            log.info("Não há docentes cadastrados");
             throw new NotFoundException("Não há docentes cadastrados");
         }
 
@@ -62,6 +65,7 @@ public class DocenteService {
         String role = tokenService.buscaCampo(token, "scope");
 
         if (!"admin".equals(role) && !"pedagogico".equals(role) && !"recruiter".equals(role)) {
+            log.error("Usuário não autorizado: {}", role);
             throw new SecurityException("Usuário não autorizado");
         }
         DocenteEntity docente = repository.findById(id).orElseThrow(() -> new NotFoundException("Docente não encontrado"));
@@ -71,6 +75,7 @@ public class DocenteService {
                 log.info("Professor com id {} encontrado", id);
                 return docente;
             } else {
+                log.error("Usuários pedagogicos ou recruiters só podem encontrar docente que sejam profressores");
                 throw new SecurityException("Usuários pedagogicos ou recruiters só podem encontrar docente que sejam profressores");
             }
         } else {
@@ -83,28 +88,43 @@ public class DocenteService {
         String role = tokenService.buscaCampo(token, "scope");
 
         if (!"admin".equals(role) && !"pedagogico".equals(role) && !"recruiter".equals(role)) {
+            log.error("Usuário não autorizado: {}", role);
             throw new SecurityException("Usuário não autorizado");
         }
 
         if (inserirDocenteRequest.nome() == null || inserirDocenteRequest.nome().isBlank()) {
+            log.error("Nome não pode ser nulo ou vazio");
             throw new IllegalArgumentException("Nome não pode ser nulo ou vazio");
+        }
+
+        if (repository.existsByNome(inserirDocenteRequest.nome())) {
+            log.error("Um docente já existe com o nome: {}", inserirDocenteRequest.nome());
+            throw new IllegalArgumentException("Um docente já existe com o nome passado");
         }
 
         Long usuarioId = Long.valueOf(tokenService.buscaCampo(token, "sub"));
 
         UsuarioEntity usuario = usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+                .orElseThrow(() -> {
+                    log.error("Usuário não encontrado com o id: {}", usuarioId);
+                    return new RuntimeException("Usuário não encontrado");
+                });
 
         UsuarioEntity newDocenteUsuario = usuarioRepository.findById(inserirDocenteRequest.usuario())
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+                .orElseThrow(() -> {
+                    log.error("Usuário não encontrado com o id: {}", inserirDocenteRequest.usuario());
+                    return new RuntimeException("Usuário não encontrado");
+                });
 
         String newDocentePapel = newDocenteUsuario.getPapel().getNome().toString();
 
         if (("pedagogico".equals(role) || "recruiter".equals(role)) && !"professor".equals(newDocentePapel)) {
+            log.error("Usuário pedagogico ou recruiter só pode salvar um docente com o papel professor");
             throw new SecurityException("Usuário pedagogico ou recruiter só pode salvar um docente com o papel professor");
         }
 
         if (repository.existsByUsuarioId(inserirDocenteRequest.usuario())) {
+            log.debug("Um docente já existe com o Id de usuário: {}", inserirDocenteRequest.usuario());
             throw new RuntimeException("Um docente já existe com o Id de usuário passado");
         }
 
@@ -142,13 +162,20 @@ public class DocenteService {
         String role = tokenService.buscaCampo(token, "scope");
 
         if (!"admin".equals(role) && !"pedagogico".equals(role) && !"recruiter".equals(role)) {
+            log.error("Usuário não autorizado: {}", role);
             throw new SecurityException("Tentativa de atualizar não autorizada");
         }
 
         DocenteEntity entity = buscarPorId(id, token);
 
         if (atualizarDocenteRequest.nome() == null || atualizarDocenteRequest.nome().isBlank()) {
+            log.error("Nome não pode ser nulo ou vazio");
             throw new IllegalArgumentException("Nome não pode ser nulo ou vazio");
+        }
+
+        if (repository.existsByNome(atualizarDocenteRequest.nome())) {
+            log.error("Um docente já existe com o nome: {}", atualizarDocenteRequest.nome());
+            throw new IllegalArgumentException("Um docente já existe com o nome passado");
         }
 
         log.info("Atualizando docente com o id {}", entity.getId());

@@ -30,11 +30,15 @@ public class TurmaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TurmaEntity> buscarTurmaPorId(
+    public ResponseEntity<?> buscarTurmaPorId(
             @PathVariable Long id,
             @RequestHeader("Authorization") String token) {
-        TurmaEntity turma = service.buscarPorId(id, token.substring(7));
-        return ResponseEntity.ok(turma);
+        try {
+            TurmaEntity turma = service.buscarPorId(id, token.substring(7));
+            return ResponseEntity.ok(turma);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping
@@ -44,17 +48,21 @@ public class TurmaController {
         try {
             TurmaResponse criarTurmaResponse = service.salvar(inserirTurmaRequest, token.substring(7));
             return new ResponseEntity<>(criarTurmaResponse, HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarTurma(
+    public ResponseEntity<?> deletarTurma(
             @PathVariable Long id,
             @RequestHeader("Authorization") String token) {
-        service.removerPorid(id, token.substring(7));
-        return ResponseEntity.noContent().build();
+        try {
+            service.removerPorid(id, token.substring(7));
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping("/{id}")
@@ -66,7 +74,7 @@ public class TurmaController {
             return ResponseEntity.ok(service.atualizar(atualizarTurmaRequest, id, token.substring(7)));
         } catch (NotFoundException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }

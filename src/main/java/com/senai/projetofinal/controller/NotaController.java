@@ -89,7 +89,7 @@ public class NotaController {
         try {
             NotaResponse criarNotaResponse = service.salvar(inserirNotaRequest, token.substring(7));
             return new ResponseEntity<>(criarNotaResponse, HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
@@ -115,7 +115,7 @@ public class NotaController {
             return ResponseEntity.ok(service.atualizar(atualizarNotaRequest, id, token.substring(7)));
         } catch (NotFoundException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }

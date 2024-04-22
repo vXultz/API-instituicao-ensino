@@ -6,6 +6,7 @@ import com.senai.projetofinal.datasource.entity.UsuarioEntity;
 import com.senai.projetofinal.datasource.repository.PapelRepository;
 import com.senai.projetofinal.datasource.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +17,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UsuarioService {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -30,14 +32,17 @@ public class UsuarioService {
         String role = tokenService.buscaCampo(token, "scope");
 
         if (!"admin".equals(role)) {
+            log.error("Usuário não autorizado: {}", role);
             throw new SecurityException("Apenas um admin pode cadastrar novos usuários");
         }
 
         if (inserirLoginRequest.nomeLogin() == null || inserirLoginRequest.nomeLogin().isBlank()) {
+            log.error("Nome não pode ser nulo ou vazio");
             throw new IllegalArgumentException("Login não pode ser nulo ou vazio");
         }
 
         if (inserirLoginRequest.senha() == null || inserirLoginRequest.senha().isBlank()) {
+            log.error("Senha não pode ser nula ou vazia");
             throw new IllegalArgumentException("Senha não pode ser nula ou vazia");
         }
 
@@ -45,6 +50,7 @@ public class UsuarioService {
                 .isPresent();
 
         if (loginExiste) {
+            log.error("Nome de Login já existe: {}", inserirLoginRequest.nomeLogin());
             throw new RuntimeException("Nome de Login já existe");
         }
 
