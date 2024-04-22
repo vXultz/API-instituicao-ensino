@@ -54,11 +54,15 @@ public class DocenteController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarDocente(
+    public ResponseEntity<?> deletarDocente(
             @PathVariable Long id,
             @RequestHeader("Authorization") String token) {
-        service.removerPorId(id, token.substring(7));
-        return ResponseEntity.noContent().build();
+        try {
+            service.removerPorId(id, token.substring(7));
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping("/{id}")
@@ -71,7 +75,7 @@ public class DocenteController {
             return new ResponseEntity<>(atualizarDocente, HttpStatus.OK);
         } catch (NotFoundException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
