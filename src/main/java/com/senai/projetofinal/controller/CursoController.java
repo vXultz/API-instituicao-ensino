@@ -34,11 +34,15 @@ public class CursoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CursoEntity> buscarCursoPorId(
+    public ResponseEntity<?> buscarCursoPorId(
             @PathVariable Long id,
             @RequestHeader("Authorization") String token) {
+        try {
             CursoEntity curso = service.buscarPorId(id, token.substring(7));
             return ResponseEntity.ok().body(curso);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping
@@ -54,11 +58,15 @@ public class CursoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarCurso(
+    public ResponseEntity<?> deletarCurso(
             @PathVariable Long id,
             @RequestHeader("Authorization") String token) {
+        try {
             service.removerPorId(id, token.substring(7));
             return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping("/{id}")
@@ -71,7 +79,7 @@ public class CursoController {
             return new ResponseEntity<>(atualizarCurso, HttpStatus.OK);
         } catch (NotFoundException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }

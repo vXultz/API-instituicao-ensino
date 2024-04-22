@@ -30,11 +30,15 @@ public class AlunoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AlunoEntity> buscarAlunoPorId(
+    public ResponseEntity<?> buscarAlunoPorId(
             @PathVariable Long id,
             @RequestHeader("Authorization") String token) {
+        try {
             AlunoEntity aluno = service.buscarPorId(id, token.substring(7));
             return new ResponseEntity<>(aluno, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping
@@ -44,7 +48,7 @@ public class AlunoController {
         try {
             AlunoResponse criarAlunoResponse = service.salvar(inserirAlunoRequest, token.substring(7));
             return new ResponseEntity<>(criarAlunoResponse, HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
@@ -71,7 +75,7 @@ public class AlunoController {
             return new ResponseEntity<>(atualizarAlunoResponse, HttpStatus.OK);
         } catch (NotFoundException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }

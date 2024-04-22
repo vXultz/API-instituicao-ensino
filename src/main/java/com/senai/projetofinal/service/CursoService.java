@@ -29,12 +29,14 @@ public class CursoService {
         String role = tokenService.buscaCampo(token, "scope");
 
         if (!"admin".equals(role) && !"pedagogico".equals(role)) {
+            log.error("Usuário não autorizado: {}", role);
             throw new SecurityException("Usuário não autorizado");
         }
 
         List<CursoEntity> cursos = repository.findAll();
 
         if(cursos.isEmpty()) {
+            log.info("Não há cursos cadastrados");
             throw new NotFoundException("Não há cursos cadastrados");
         }
 
@@ -46,21 +48,32 @@ public class CursoService {
         String role = tokenService.buscaCampo(token, "scope");
 
         if (!"admin".equals(role) && !"pedagogico".equals(role)) {
+            log.error("Usuário não autorizado: {}", role);
             throw new SecurityException("Usuário não autorizado");
         }
         log.info("curso com id {} buscado", id);
-        return repository.findById(id).orElseThrow(() -> new NotFoundException("Curso não encontrado"));
+        return repository.findById(id).orElseThrow(() -> {
+            log.error("Curso não encontrado");
+            return new NotFoundException("Curso não encontrado");
+        });
     }
 
     public CursoResponse salvar(InserirCursoRequest inserirCursoRequest, String token) {
         String role = tokenService.buscaCampo(token, "scope");
 
         if (!"admin".equals(role) && !"pedagogico".equals(role)) {
+            log.error("Usuário não autorizado: {}", role);
             throw new SecurityException("Usuário não autorizado");
         }
 
         if (inserirCursoRequest.nome() == null || inserirCursoRequest.nome().isBlank()) {
+            log.error("Nome não pode ser nulo ou vazio");
             throw new IllegalArgumentException("Nome não pode ser nulo ou vazio");
+        }
+
+        if (repository.existsByNome(inserirCursoRequest.nome())) {
+            log.error("Já existe um curso com o nome informado");
+            throw new IllegalArgumentException("Já existe um curso com o nome informado");
         }
 
         CursoEntity curso = new CursoEntity();
@@ -78,10 +91,12 @@ public class CursoService {
     public void removerPorId(Long id, String token) {
         String role = tokenService.buscaCampo(token, "scope");
         if (!"admin".equals(role)) {
+            log.error("Apenas um usuário admin pode deletar cursos");
             throw new SecurityException("Apenas um usuário admin pode deletar cursos");
         }
 
         if (!repository.existsById(id)) {
+            log.error("Nenhum curso encontrado com o id passado");
             throw new NotFoundException("Nenhum curso encontrado com o id passado");
         }
 
@@ -93,13 +108,20 @@ public class CursoService {
         String role = tokenService.buscaCampo(token, "scope");
 
         if (!"admin".equals(role) && !"pedagogico".equals(role)) {
+            log.error("Usuário não autorizado: {}", role);
             throw new SecurityException("Tentativa de atualizar não autorizada");
         }
 
         CursoEntity entity = buscarPorId(id, token);
 
         if (atualizarCursoRequest.nome() == null || atualizarCursoRequest.nome().isBlank()) {
+            log.error("Nome não pode ser nulo ou vazio");
             throw new IllegalArgumentException("Nome não pode ser nulo ou vazio");
+        }
+
+        if (repository.existsByNome(atualizarCursoRequest.nome())) {
+            log.error("Um curso já existe com o nome {}", atualizarCursoRequest.nome());
+            throw new IllegalArgumentException("Um curso já existe com o nome passado");
         }
 
         log.info("Atualizando curso com o id {}", entity.getId());

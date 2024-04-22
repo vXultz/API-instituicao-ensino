@@ -22,7 +22,6 @@ public class CadastroController {
             @RequestHeader("Authorization") String token) {
         try {
             usuarioService.cadastraNovoLogin(inserirLoginRequest, token.substring(7));
-
             return ResponseEntity.ok("Usuário Salvo!");
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

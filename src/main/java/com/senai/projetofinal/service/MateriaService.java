@@ -33,12 +33,14 @@ public class MateriaService {
         String role = tokenService.buscaCampo(token, "scope");
 
         if (!"admin".equals(role) && !"pedagogico".equals(role)) {
+            log.error("Usuário não autorizado: {}", role);
             throw new SecurityException("Usuário não autorizado");
         }
 
         List<MateriaEntity> materias = repository.findAll();
 
         if (materias.isEmpty()) {
+            log.info("Nenhuma matéria encontrada");
             throw new NotFoundException("Nenhuma matéria encontrada");
         }
 
@@ -51,23 +53,29 @@ public class MateriaService {
         String role = tokenService.buscaCampo(token, "scope");
 
         if (!"admin".equals(role) && !"pedagogico".equals(role)) {
+            log.error("Usuário não autorizado: {}", role);
             throw new SecurityException("Usuário não autorizado");
         }
 
         log.info("Matéria com id {} encontrada", id);
-        return repository.findById(id).orElseThrow(() -> new NotFoundException("Matéria não encontrada"));
+        return repository.findById(id).orElseThrow(() -> {
+            log.error("Matéria não encontrada com o id: {}", id);
+            return new NotFoundException("Matéria não encontrada");
+        });
     }
 
     public List<MateriaEntity> buscarMateriasPorCursoId(Long curso_id, String token) {
         String role = tokenService.buscaCampo(token, "scope");
 
         if (!"admin".equals(role) && !"pedagogico".equals(role)) {
+            log.error("Usuário não autorizado: {}", role);
             throw new SecurityException("Usuário não autorizado");
         }
 
         List<MateriaEntity> materiasPorCurso = repository.findMateriaByCursoId(curso_id);
 
         if (materiasPorCurso.isEmpty()) {
+            log.error("Nenhuma matéria encontrada para o id de curso: {}", curso_id);
             throw new NotFoundException("Nenhuma matéria encontrada para o id de curso informado");
         }
 
@@ -80,15 +88,25 @@ public class MateriaService {
         String role = tokenService.buscaCampo(token, "scope");
 
         if (!"admin".equals(role) && !"pedagogico".equals(role)) {
+            log.error("Usuário não autorizado: {}", role);
             throw new SecurityException("Usuário não autorizado");
         }
 
         if (inserirMateriaRequest.nome() == null || inserirMateriaRequest.nome().isBlank()) {
+            log.error("Nome não pode ser nulo ou vazio");
             throw new IllegalArgumentException("Nome não pode ser nulo ou vazio");
         }
 
+        if (repository.existsByNome(inserirMateriaRequest.nome())) {
+            log.error("Uma matéria já existe com o nome: {}", inserirMateriaRequest.nome());
+            throw new IllegalArgumentException("Uma matéria já existe com o nome passado");
+        }
+
         CursoEntity curso = cursoRepository.findById(inserirMateriaRequest.curso())
-                .orElseThrow(() -> new NotFoundException("Curso não encontrado"));
+                .orElseThrow(() -> {
+                    log.error("Curso não encontrado");
+                    return new NotFoundException("Curso não encontrado");
+                });
 
         MateriaEntity materia = new MateriaEntity();
         materia.setNome(inserirMateriaRequest.nome());
@@ -108,10 +126,12 @@ public class MateriaService {
         String role = tokenService.buscaCampo(token, "scope");
 
         if (!"admin".equals(role)) {
+            log.error("Apenas um usuário admin pode remover uma matéria");
             throw new SecurityException("Apenas um usuário admin pode remover uma matéria");
         }
 
         if (!repository.existsById(id)) {
+            log.error("Nenhuma matéria encontrada com o id: {}", id);
             throw new NotFoundException("Nenhuma matéria encontrada com o id passado");
         }
 
@@ -123,17 +143,27 @@ public class MateriaService {
         String role = tokenService.buscaCampo(token, "scope");
 
         if (!"admin".equals(role) && !"pedagogico".equals(role)) {
+            log.error("Usuário não autorizado: {}", role);
             throw new SecurityException("Usuário não autorizado");
         }
 
         MateriaEntity entity = buscarPorId(id, token);
 
         if (atualizarMateriaRequest.nome() == null || atualizarMateriaRequest.nome().isBlank()) {
+            log.error("Nome não pode ser nulo ou vazio");
             throw new IllegalArgumentException("Nome não pode ser nulo ou vazio");
         }
 
+        if (repository.existsByNome(atualizarMateriaRequest.nome())) {
+            log.error("Uma matéria já existe com o nome: {}", atualizarMateriaRequest.nome());
+            throw new IllegalArgumentException("Uma matéria já existe com o nome passado");
+        }
+
         CursoEntity curso = cursoRepository.findById(atualizarMateriaRequest.curso()
-        ).orElseThrow(() -> new NotFoundException("Curso não encontrado"));
+        ).orElseThrow(() -> {
+            log.error("Curso não encontrado");
+            return new NotFoundException("Curso não encontrado");
+        });
 
         log.info("Atualizando matéria com o id {}", entity.getId());
         entity.setNome(atualizarMateriaRequest.nome());
