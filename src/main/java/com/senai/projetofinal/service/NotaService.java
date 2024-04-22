@@ -175,6 +175,12 @@ public class NotaService {
                     return new NotFoundException("Docente não encontrado");
                 });
 
+        if (!"professor".equals(docente.getUsuario().getPapel().getNome().toString())
+                && !"admin".equals(docente.getUsuario().getPapel().getNome().toString())) {
+            log.error("O docente a ser salvo na nota não é um usuário admin ou professor");
+            throw new SecurityException("O docente a ser salvo na nota não é um usuário admin ou professor");
+        }
+
         MateriaEntity materia = materiaRepository.findById(inserirNotaRequest.materia())
                 .orElseThrow(() -> {
                     log.error("Matéria não encontrada");
@@ -263,11 +269,10 @@ public class NotaService {
 
         Long usuarioAluno = aluno.getUsuario().getId();
 
-        if ("admin".equals(role) || "pedagogico".equals(role) || "professor".equals(role)) {
-            if (!Objects.equals(usuario, usuarioAluno)) {
-                log.error("Apenas pontuação com o seu Id podem ser acessadas");
-                throw new SecurityException("Apenas pontuação com o seu Id podem ser acessadas");
-            }
+
+        if ("aluno".equals(role) && !Objects.equals(usuario, usuarioAluno)) {
+            log.error("Apenas pontuação com o seu Id podem ser acessadas");
+            throw new SecurityException("Apenas pontuação com o seu Id podem ser acessadas");
         }
 
         List<NotaEntity> notasPorAluno = buscarNotasPorAlunoId(aluno_id, token);
