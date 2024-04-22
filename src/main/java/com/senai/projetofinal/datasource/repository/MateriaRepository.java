@@ -11,4 +11,5 @@ public interface MateriaRepository extends JpaRepository<MateriaEntity, Long> {
 
     List<MateriaEntity> findMateriaByCursoId(Long curso_id);
 
+    boolean existsByNome(String nome);
 }

@@ -30,19 +30,27 @@ public class MateriaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MateriaEntity> buscarMateriaPorId(
+    public ResponseEntity<?> buscarMateriaPorId(
             @PathVariable Long id,
             @RequestHeader("Authorization") String token) {
-        MateriaEntity materia = service.buscarPorId(id, token.substring(7));
-        return ResponseEntity.ok(materia);
+        try {
+            MateriaEntity materia = service.buscarPorId(id, token.substring(7));
+            return ResponseEntity.ok(materia);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/cursos/{curso_id}")
-    public ResponseEntity<List<MateriaEntity>> getMateriasByCurso(
+    public ResponseEntity<?> getMateriasByCurso(
             @PathVariable Long curso_id,
             @RequestHeader("Authorization") String token) {
-        List<MateriaEntity> materias = service.buscarMateriasPorCursoId(curso_id, token.substring(7));
-        return ResponseEntity.ok(materias);
+        try {
+            List<MateriaEntity> materias = service.buscarMateriasPorCursoId(curso_id, token.substring(7));
+            return ResponseEntity.ok(materias);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping
@@ -52,17 +60,21 @@ public class MateriaController {
         try {
             MateriaResponse criarMateriaResponse = service.salvar(inserirMateriaRequest, token.substring(7));
             return new ResponseEntity<>(criarMateriaResponse, HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarMateria(
+    public ResponseEntity<?> deletarMateria(
             @PathVariable Long id,
             @RequestHeader("Authorization") String token) {
-        service.removerPorId(id, token.substring(7));
-        return ResponseEntity.noContent().build();
+        try {
+            service.removerPorId(id, token.substring(7));
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping("/{id}")
@@ -74,7 +86,7 @@ public class MateriaController {
             return ResponseEntity.ok(service.atualizar(atualizarMateriaRequest, id, token.substring(7)));
         } catch (NotFoundException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
