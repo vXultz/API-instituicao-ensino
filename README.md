@@ -1,6 +1,6 @@
 # Sistema Escolar Avançado
 
-Nesta API Restful, você encontrará uma solução para um sistema escolar. Neste sistema, há 5 **papéis de usuário**, cada um com usos e acessos específicos. Abaixo, você encontrará informações sobre o que cada um dos papéis faz e ao que eles têm acesso.
+Nesta API Rest, você encontrará uma solução para um sistema escolar. Neste sistema, há 5 **papéis de usuário**, cada um com usos e acessos específicos. Abaixo, você encontrará informações sobre o que cada um dos papéis faz e ao que eles têm acesso.
 
 A API conta com diversas verificações e validações para garantir que cada **papel** só acesse aquilo que é permitido, além de **logs** de informações e erros.
 
