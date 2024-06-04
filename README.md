@@ -1,4 +1,4 @@
-# Sistema Escolar Avançado
+# API para Instituições de Ensino
 
 Nesta API Rest, você encontrará uma solução para um sistema escolar. Neste sistema, há 5 **papéis de usuário**, cada um com usos e acessos específicos. Abaixo, você encontrará informações sobre o que cada um dos papéis faz e ao que eles têm acesso.
 
